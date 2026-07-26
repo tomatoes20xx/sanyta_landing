@@ -27,11 +27,17 @@
   --grad-a:       #F5907A;
   --grad-b:       #B882C8;
 
-  /* Section tones (bg / ink / chip) */
+  /* Section tones (bg / ink / chip) — lifted from the app's section tokens */
   --dev-bg:   #EDE0FF;  --dev-ink:   #6E4FB0;  --dev-chip:   #B9A3E8;
   --rec-bg:   #FFE0EC;  --rec-ink:   #C24E73;  --rec-chip:   #F4A0B8;
   --act-bg:   #DDF5F0;  --act-ink:   #2F8F6E;  --act-chip:   #7DD4B8;
   --cal-bg:   #FFF3D4;  --cal-ink:   #B07A1E;  --cal-chip:   #F4C04A;
+  --trk-bg:   #DDE8FF;  --trk-ink:   #4B72C4;  --trk-chip:   #9DBAF0;
+  --snd-bg:   #ECE3FB;  --snd-ink:   #6B45C0;  --snd-chip:   #B69EEB;
+  --mom-bg:   #DFF3F5;  --mom-ink:   #2C7A85;  --mom-chip:   #8FCED6;
+  --grw-bg:   #E4F3DA;  --grw-ink:   #4C8A2E;  --grw-chip:   #A6D588;
+  --vax-bg:   #FFE2E0;  --vax-ink:   #C24A44;  --vax-chip:   #F1A29C;
+  --aid-bg:   #FDEAE2;  --aid-ink:   #C25A3C;  --aid-chip:   #F3B49C;
 
   /* Radii */
   --r-sm: 12px;
@@ -53,6 +59,9 @@
 * { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
+
+/* Offset in-page anchors so the sticky nav doesn't cover the target */
+:target, #download { scroll-margin-top: 96px; }
 
 body {
   margin: 0;
@@ -111,11 +120,6 @@ h1, h2, h3 { margin: 0; letter-spacing: -.02em; line-height: 1.12; font-weight: 
 .store-badge .sb-text { display: flex; flex-direction: column; line-height: 1.1; }
 .store-badge .sb-top { font-size: 11px; font-weight: 500; opacity: .82; letter-spacing: .01em; }
 .store-badge .sb-name { font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
-.store-badge.is-soon { opacity: .9; }
-.store-badge .sb-soon {
-  margin-left: 4px; font-size: 10px; font-weight: 700; background: var(--coral);
-  padding: 2px 7px; border-radius: 999px; align-self: center;
-}
 
 /* ---------- Nav ---------- */
 .nav {
@@ -170,28 +174,20 @@ section { position: relative; }
   filter: blur(8px); border-radius: 50%; z-index: 0;
 }
 .phone {
-  position: absolute; border-radius: 44px;
-  background: #faf6f1;
-  padding: 9px;
+  position: absolute;
+  border-radius: 44px;
+  background: #2d2d3e;
+  padding: 5px;
   box-shadow: var(--sh-phone);
-  border: 1px solid rgba(0,0,0,.05);
+  border: 1px solid rgba(0, 0, 0, .05);
 }
-.phone .screen { border-radius: 36px; overflow: hidden; display: block; position: relative; background: var(--cream); }
-.phone .screen img { width: 100%; height: 100%; object-fit: cover; }
-.phone .island {
-  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-  width: 32%; height: 26px; background: #15131c; border-radius: 999px; z-index: 3;
-}
+/* Screen height derives from the real screenshot aspect (1080x2400) so the
+   full app screen shows without cropping the top. */
+.phone .screen { border-radius: 36px; overflow: hidden; display: block; position: relative; background: var(--cream); aspect-ratio: 1080 / 2400; }
+.phone .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .phone.center { width: 270px; z-index: 2; }
-.phone.center .screen { height: 584px; }
 .phone.left { width: 218px; left: 2%; top: 14%; transform: rotate(-7deg); z-index: 1; }
-.phone.left .screen { height: 472px; }
 .phone.right { width: 218px; right: 2%; bottom: 6%; transform: rotate(7deg); z-index: 1; }
-.phone.right .screen { height: 472px; }
-/* the centerpiece image already includes a device bezel + island */
-.phone.bare { background: transparent; padding: 0; box-shadow: none; border: none; }
-.phone.bare .screen { border-radius: 40px; box-shadow: var(--sh-phone); }
-.phone.bare .island { display: none; }
 
 .spark { position: absolute; color: var(--cal-chip); z-index: 3; filter: drop-shadow(0 4px 8px rgba(0,0,0,.08)); }
 
@@ -232,6 +228,24 @@ section { position: relative; }
 .feature.cal .ico { background: var(--cal-bg); color: var(--cal-ink); }
 .feature.cal .stat { background: var(--cal-bg); color: var(--cal-ink); }
 .feature.cal .blob { background: var(--cal-chip); }
+.feature.trk .ico { background: var(--trk-bg); color: var(--trk-ink); }
+.feature.trk .stat { background: var(--trk-bg); color: var(--trk-ink); }
+.feature.trk .blob { background: var(--trk-chip); }
+.feature.snd .ico { background: var(--snd-bg); color: var(--snd-ink); }
+.feature.snd .stat { background: var(--snd-bg); color: var(--snd-ink); }
+.feature.snd .blob { background: var(--snd-chip); }
+.feature.mom .ico { background: var(--mom-bg); color: var(--mom-ink); }
+.feature.mom .stat { background: var(--mom-bg); color: var(--mom-ink); }
+.feature.mom .blob { background: var(--mom-chip); }
+.feature.grw .ico { background: var(--grw-bg); color: var(--grw-ink); }
+.feature.grw .stat { background: var(--grw-bg); color: var(--grw-ink); }
+.feature.grw .blob { background: var(--grw-chip); }
+.feature.vax .ico { background: var(--vax-bg); color: var(--vax-ink); }
+.feature.vax .stat { background: var(--vax-bg); color: var(--vax-ink); }
+.feature.vax .blob { background: var(--vax-chip); }
+.feature.aid .ico { background: var(--aid-bg); color: var(--aid-ink); }
+.feature.aid .stat { background: var(--aid-bg); color: var(--aid-ink); }
+.feature.aid .blob { background: var(--aid-chip); }
 
 /* feature with embedded screen detail (wide cards) */
 .feature.wide { grid-column: span 2; display: grid; grid-template-columns: 1.1fr .9fr; gap: 30px; align-items: center; padding: 36px 36px 36px 40px; }
@@ -279,6 +293,21 @@ section { position: relative; }
 .trust-point .tp-ico svg { width: 20px; height: 20px; }
 .trust-point b { font-size: 15px; }
 .trust-point span { display: block; color: var(--sub); font-size: 13.5px; margin-top: 2px; }
+
+/* ---------- Trusted sources strip ---------- */
+.sources { text-align: center; }
+.sources .src-label { color: var(--sub); font-size: 14px; font-weight: 700; letter-spacing: .02em; }
+.sources .src-list {
+  margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+}
+.src-chip {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
+  background: var(--surface); border: 1px solid var(--divider); border-radius: var(--r-md);
+  box-shadow: var(--sh-sm); padding: 16px 18px; width: 202px; text-align: center;
+}
+.src-chip b { font-size: 16px; font-weight: 800; color: var(--primary-deep); letter-spacing: .01em; }
+.src-chip .src-name { font-size: 12.5px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.src-chip .src-use { font-size: 11.5px; font-weight: 600; color: var(--hint); }
 
 /* ---------- FAQ ---------- */
 .faq { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
@@ -372,8 +401,8 @@ section { position: relative; }
   .wrap { padding: 0 18px; }
   .section-pad { padding: 64px 0; }
   .phones { height: 440px; }
-  .phone.center { width: 220px; } .phone.center .screen { height: 476px; }
-  .phone.left, .phone.right { width: 170px; } .phone.left .screen, .phone.right .screen { height: 368px; }
+  .phone.center { width: 220px; }
+  .phone.left, .phone.right { width: 170px; }
   .footer-inner { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
 }

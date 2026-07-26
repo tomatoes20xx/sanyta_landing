@@ -24,27 +24,4 @@
       else { item.classList.add('open'); a.style.maxHeight = a.scrollHeight + 'px'; }
     });
   });
-
-  // ---- Store links (placeholders) ----
-  // Replace these with real URLs when the app goes live.
-  var STORE_URLS = {
-    ios: '#',      // e.g. https://apps.apple.com/app/idXXXXXXXXX
-    android: '#'   // e.g. https://play.google.com/store/apps/details?id=app.sanyta
-  };
-  document.querySelectorAll('[data-store]').forEach(function (el) {
-    var key = el.getAttribute('data-store');
-    var url = STORE_URLS[key];
-    if (url && url !== '#') { el.setAttribute('href', url); el.setAttribute('target', '_blank'); el.setAttribute('rel', 'noopener'); }
-    else {
-      el.addEventListener('click', function (ev) {
-        ev.preventDefault();
-        el.classList.add('is-soon');
-        if (!el.querySelector('.sb-soon')) {
-          var b = document.createElement('span');
-          b.className = 'sb-soon'; b.textContent = 'მალე';
-          el.appendChild(b);
-        }
-      });
-    }
-  });
 })();
