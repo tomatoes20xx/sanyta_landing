@@ -1,0 +1,61 @@
+---
+// Legal text: ported verbatim from the old privacy.html and kept formal
+// (თქვენ), as SANYTA_BRAND.md D1 requires for the privacy page.
+// Only the page chrome is new. Don't reword the policy here without Toma.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+
+<Base title="კონფიდენციალურობის პოლიტიკა — Sanyta" description="Sanyta-ს კონფიდენციალურობის პოლიტიკა.">
+  <PageHero eyebrow="სამართლებრივი" title="კონფიდენციალურობის პოლიტიკა" lead="ბოლო განახლება: 2026 წლის იანვარი" />
+
+  <section class="band-a legal">
+    <div class="wrap narrow">
+      <div class="summary">
+        <p><b>მოკლედ:</b> Sanyta პატივს სცემს თქვენი ოჯახის კონფიდენციალურობას. ჩვენ არ ვყიდით თქვენს მონაცემებს და არ ვაჩვენებთ რეკლამას.</p>
+      </div>
+
+      <h2>1. რა ინფორმაციას ვაგროვებთ</h2>
+      <p>Sanyta არ აგროვებს პირად ინფორმაციას.</p>
+
+      <h2>2. როგორ ვიყენებთ ინფორმაციას</h2>
+      <p>Sanyta არ იყენებს პირად ინფორმაციას აპლიკაციის ფუნქციონირებისთვის.</p>
+
+      <h2>3. მონაცემთა შენახვა და უსაფრთხოება</h2>
+      <p>მონაცემები ინახება მხოლოდ თქვენს მოწყობილობაზე.</p>
+
+      <h2>4. ბავშვთა მონაცემები</h2>
+      <p>Sanyta არ აგროვებს ბავშვთა პირად ინფორმაციას. ყველა მონაცემი ინახება მხოლოდ თქვენს მოწყობილობაზე.</p>
+
+      <h2>5. თქვენი უფლებები</h2>
+      <p>
+        გაეცანით ჩვენს კონფიდენციალურობის პოლიტიკას და თქვენს უფლებებს მონაცემთა დაცვის შესახებ:
+        <a href="https://tomatoes20xx.github.io/sanyta_privacy_policy/" target="_blank" rel="noopener noreferrer">სრული პოლიტიკა</a>
+      </p>
+
+      <h2>6. კონტაქტი</h2>
+      <p>კითხვების შემთხვევაში დაგვიკავშირდით: <a href={`mailto:${site.email}`}>{site.email}</a></p>
+
+      <p class="back"><a class="pill pill-outline" href="/"><Icon name="arrow-left" size={18} /> მთავარ გვერდზე დაბრუნება</a></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal { padding-block: clamp(24px, 4vw, 48px) clamp(72px, 10vw, 120px); }
+  .narrow { max-width: 760px; }
+
+  .summary {
+    padding: 22px 24px;
+    border-radius: var(--r-box);
+    background: var(--primary-light);
+  }
+
+  h2 { font-size: 1.25rem; margin-top: 40px; }
+  h2 + p { margin-top: 10px; color: var(--text-2); }
+  p a:not(.pill) { color: var(--highlight-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+  .back { margin-top: 48px; }
+</style>

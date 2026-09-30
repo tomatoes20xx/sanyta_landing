@@ -1,0 +1,126 @@
+---
+import { site } from '../data/site';
+
+const year = new Date().getFullYear();
+
+const columns = [
+  {
+    title: 'აპლიკაცია',
+    links: [
+      { href: '/#features', label: 'შესაძლებლობები' },
+      { href: '/#sources', label: 'წყაროები' },
+      { href: '/#faq', label: 'კითხვები' },
+    ],
+  },
+  {
+    title: 'კომპანია',
+    links: [
+      { href: '/about.html', label: 'ჩვენ შესახებ' },
+      { href: `mailto:${site.email}`, label: 'დაგვიკავშირდი' },
+    ],
+  },
+  {
+    title: 'სამართლებრივი',
+    links: [{ href: '/privacy.html', label: 'კონფიდენციალურობის პოლიტიკა' }],
+  },
+  {
+    title: 'ჩამოტვირთვა',
+    links: [{ href: site.appStoreUrl, label: 'App Store', external: true }],
+  },
+];
+---
+
+<footer class="footer">
+  <div class="wrap top">
+    <div class="about">
+      <a class="brand" href="/">
+        <img src="/brand/icon.png" alt="" width="36" height="36" loading="lazy" />
+        <span>{site.name}</span>
+      </a>
+      <p class="sign-off">{site.signOff}</p>
+      <p class="muted small">{site.positioning}.</p>
+    </div>
+
+    {columns.map((col) => (
+      <div class="col">
+        <h2>{col.title}</h2>
+        <ul>
+          {col.links.map((l) => (
+            <li>
+              <a href={l.href} {...('external' in l && l.external ? { target: '_blank', rel: 'noopener' } : {})}>
+                {l.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+
+  <div class="wrap bottom">
+    <span>© {year} {site.name}</span>
+    <span>Sanyta არ ცვლის ექიმს — ნებისმიერ კითხვაზე მიმართე პედიატრს.</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--band-a);
+    border-top: 1px solid var(--divider);
+    padding-block: 64px 28px;
+    color: var(--text);
+  }
+  /* the closing section's hill already runs into the footer */
+  :global(main:has(> .mission:last-child)) + .footer { border-top: 0; }
+
+  .top {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(4, 1fr);
+    gap: 40px 32px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.25rem;
+  }
+  .brand img { width: 36px; height: 36px; border-radius: 10px; }
+
+  .sign-off {
+    margin-top: 16px;
+    font-weight: 700;
+    font-size: 1.0625rem;
+  }
+  .about .muted { margin-top: 6px; max-width: 32ch; }
+
+  /* Sleepiest's column headings: small, bold, spaced out */
+  .col h2 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .col a { color: var(--text-2); font-size: 0.9375rem; transition: color .15s ease; }
+  .col a:hover { color: var(--text); }
+
+  .bottom {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--divider);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    font-size: 0.8125rem;
+    color: var(--text-2);
+  }
+
+  @media (max-width: 900px) {
+    .top { grid-template-columns: repeat(2, 1fr); }
+    .about { grid-column: 1 / -1; }
+  }
+</style>

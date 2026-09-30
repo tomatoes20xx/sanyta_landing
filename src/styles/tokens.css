@@ -1,0 +1,97 @@
+/* ============================================================
+   Sanyta — design tokens
+   Values come from the app's AppColors spec
+   (children_health_app/.claude/colors.md). Light is the default;
+   dark applies when the OS prefers it (unless the visitor picked
+   light) or when the toggle sets data-theme="dark".
+
+   One accent per theme, as in the app: lavender (light), coral (dark).
+   The section tints are backgrounds only, never text or buttons.
+   ============================================================ */
+
+:root {
+  color-scheme: light;
+
+  /* Surfaces: two neighbouring page tones, cards on top */
+  --band-a: #FFF6EC;          /* background */
+  --band-b: #FFFFFF;          /* surface */
+  --card-on-a: #FFFFFF;       /* surface */
+  --card-on-b: #FFF6EC;       /* background */
+  --divider: #ECE4F0;         /* hairlines */
+
+  /* Text */
+  --text: #2D2D3E;            /* textPrimary */
+  --text-2: #6B6B80;          /* textSecondary */
+  --text-2-sky: #5A5A6E;      /* secondary text on gradients and tinted cells (AA on every tint) */
+
+  /* Accent */
+  --primary: #9B7FD4;         /* primary */
+  --primary-light: #E8DEFF;   /* primaryLight */
+  --highlight: #9B7FD4;       /* the picked-out phrase in a heading (large text only) */
+  --highlight-ink: #6E4FB0;   /* small accent text: primary deepened for AA */
+
+  /* Buttons: the pill is the inverse of the page */
+  --cta-bg: #2D2D3E;
+  --cta-ink: #FFF6EC;
+  --cta-bg-hover: #45455A;
+
+  /* Gradient panels (hero, closing CTA): a pale dawn so dark text reads */
+  --sky-1: #FFF6EC;
+  --sky-2: #FFE9E0;
+  --sky-3: #F3E4FA;
+
+  /* Phone outline (Toma, 2026-09-30); same in both themes */
+  --bezel: rgb(36 14 100);
+
+  /* Section tints, from the app's section tiles */
+  --dev-bg: #EDE0FF;
+  --rec-bg: #FFE0EC;
+  --act-bg: #DDF5F0;
+  --cal-bg: #FFF3D4;
+  --peach-bg: #FDEAE2;
+
+  /* Shadows, tinted to the page hue */
+  --shadow-sm: 0 4px 14px rgb(60 45 80 / 0.06);
+  --shadow-md: 0 14px 34px rgb(60 45 80 / 0.10);
+  --shadow-phone: 0 40px 90px rgb(60 40 80 / 0.26);
+
+  --nav-bg: rgb(255 246 236 / 0.86);
+}
+
+/* Dark values. CSS can't share one block between a media query and an
+   attribute selector, so the list appears twice — keep both identical. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --band-a: #1A1430;  --band-b: #201837;
+    --card-on-a: #25193D;  --card-on-b: #2E2148;
+    --divider: #342A55;
+    --text: #FBEFD9;  --text-2: #A89BBE;  --text-2-sky: #D6CBE8;
+    --primary: #FF8B5E;  --primary-light: #2E2060;
+    --highlight: #FF8B5E;  --highlight-ink: #FF8B5E;
+    --cta-bg: #FBEFD9;  --cta-ink: #1A1430;  --cta-bg-hover: #FFF8EC;
+    --sky-1: #1A1430;  --sky-2: #2A1547;  --sky-3: #4A2156;
+    --dev-bg: #2E2148;  --rec-bg: #3B1E2C;  --act-bg: #1A3B35;  --cal-bg: #2A2050;  --peach-bg: #3A2418;
+    --shadow-sm: 0 4px 14px rgb(0 0 0 / 0.25);
+    --shadow-md: 0 14px 34px rgb(0 0 0 / 0.35);
+    --shadow-phone: 0 40px 90px rgb(0 0 0 / 0.55);
+    --nav-bg: rgb(26 20 48 / 0.86);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --band-a: #1A1430;  --band-b: #201837;
+  --card-on-a: #25193D;  --card-on-b: #2E2148;
+  --divider: #342A55;
+  --text: #FBEFD9;  --text-2: #A89BBE;  --text-2-sky: #D6CBE8;
+  --primary: #FF8B5E;  --primary-light: #2E2060;
+  --highlight: #FF8B5E;  --highlight-ink: #FF8B5E;
+  --cta-bg: #FBEFD9;  --cta-ink: #1A1430;  --cta-bg-hover: #FFF8EC;
+  --sky-1: #1A1430;  --sky-2: #2A1547;  --sky-3: #4A2156;
+  --dev-bg: #2E2148;  --rec-bg: #3B1E2C;  --act-bg: #1A3B35;  --cal-bg: #2A2050;  --peach-bg: #3A2418;
+  --shadow-sm: 0 4px 14px rgb(0 0 0 / 0.25);
+  --shadow-md: 0 14px 34px rgb(0 0 0 / 0.35);
+  --shadow-phone: 0 40px 90px rgb(0 0 0 / 0.55);
+  --nav-bg: rgb(26 20 48 / 0.86);
+}

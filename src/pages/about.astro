@@ -1,0 +1,174 @@
+---
+// About. Copy per SANYTA_BRAND.md §B4 notes: შენ, D3 feature names, D5
+// source order, first mentions expanded, no „&", no „ტრეკერი", no absolutes.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import StoreButton from '../components/StoreButton.astro';
+import Title from '../components/Title.astro';
+import { site, trialLine } from '../data/site';
+
+const values = [
+  {
+    icon: 'heart',
+    title: 'სითბო პირველ ადგილზე',
+    text: 'დიზაინი, რომელიც ამშვიდებს — მოკლე წინადადებები, მშვიდი ფერები და თბილი ტონი.',
+  },
+  {
+    icon: 'seal-check',
+    title: 'წყარო ყოველ რჩევაზე',
+    text: 'სტატიები, რეცეპტები და გრაფიკები ოფიციალურ წყაროებს ეყრდნობა — და აპი გიჩვენებს, რომელს.',
+  },
+  {
+    icon: 'sun-horizon',
+    title: 'ყოველდღიური თანამგზავრი',
+    text: 'პატარა, სასარგებლო შეხსენებები და იდეები, რომლებიც დღის რიტმში ბუნებრივად ჯდება.',
+  },
+];
+
+const inside = [
+  { icon: 'book-open-text', name: 'განვითარება', text: 'ასაკის მიხედვით შერჩეული სტატიები — UNICEF-ის (გაეროს ბავშვთა ფონდი) მასალებზე დაყრდნობით.' },
+  { icon: 'bowl-food', name: 'კვება და რეცეპტები', text: 'რეცეპტები 6 თვიდან 3 წლამდე, NHS-ის (ბრიტანეთის ჯანდაცვის ეროვნული სამსახური) რეკომენდაციებით; მყარი საკვების დაწყება — CDC-ის (აშშ-ის დაავადებათა კონტროლისა და პრევენციის ცენტრი) რჩევებით.' },
+  { icon: 'puzzle-piece', name: 'თამაშები და აქტივობები', text: 'ასაკის მიხედვით, სახლში არსებული ნივთებით.' },
+  { icon: 'notebook', name: 'დღიური', text: 'კვება, ძილი, ტირილი და საფენი — ქრონომეტრითა და ისტორიით.' },
+  { icon: 'moon-stars', name: 'ძილის ხმები', text: 'იავნანა და თეთრი ხმაური, ძილის ტაიმერით.' },
+  { icon: 'camera', name: 'მომენტები', text: '58 პატარა მომენტი — ფოტოთი, თარიღითა და შენიშვნით.' },
+  { icon: 'chart-line-up', name: 'ზრდის გრაფიკი', text: 'სიმაღლე და წონა WHO-ს (მსოფლიო ჯანდაცვის ორგანიზაცია) პერცენტილებით.' },
+  { icon: 'syringe', name: 'ვაქცინაცია', text: 'NCDC-ის (დაავადებათა კონტროლისა და საზოგადოებრივი ჯანმრთელობის ეროვნული ცენტრი) კალენდარი და შეხსენებები.' },
+  { icon: 'calendar-dots', name: 'კალენდარი', text: 'ექიმთან ვიზიტები და შეხვედრები, შეხსენებებით.' },
+  { icon: 'first-aid-kit', name: 'პირველადი დახმარება', text: 'პარტნიორის შეთავაზება: First Aid SkillHub-ის ტრენინგი ოჯახებისთვის, ფასდაკლებით Sanyta-ს მომხმარებლებისთვის (პრომო-კოდი აპშია).' },
+];
+---
+
+<Base title="ჩვენ შესახებ — Sanyta" description="რატომ შეიქმნა Sanyta და რა არის შიგნით: სანდო თანამგზავრი ბავშვის პირველი 3 წლისთვის.">
+  <PageHero
+    eyebrow="ჩვენ შესახებ"
+    title="მშვიდი, [ინფორმირებული] მშობლობისთვის"
+    lead="Sanyta მარტივი იდეიდან დაიბადა: ბავშვის პირველი წლები კითხვებით სავსეა, და მშობელს ერთი, სანდო ადგილი სჭირდება პასუხებისთვის."
+  />
+
+  <section class="band-a mission-section">
+    <div class="wrap mission-grid">
+      <div class="mission reveal">
+        <h2>ჩვენი მისია</h2>
+        <p>
+          დავეხმაროთ მშობლებს, თავდაჯერებულად ადევნონ თვალი შვილის განვითარებას — რას ელოდონ სხვადასხვა ეტაპზე,
+          როგორ იკვებოს პატარა და როდის არის აცრის დრო. სანდო ცოდნას თბილ, მარტივ ინსტრუმენტში ვაერთიანებთ,
+          რომელიც ყოველდღიურ ზრუნვას ამსუბუქებს.
+        </p>
+      </div>
+
+      <ul class="values">
+        {values.map((v, i) => (
+          <li class="reveal" style={`--i: ${i}`}>
+            <span class="ico"><Icon name={v.icon} size={22} /></span>
+            <div>
+              <h3>{v.title}</h3>
+              <p>{v.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band-b section">
+    <div class="wrap">
+      <div class="reveal">
+        <Title text="რა არის [Sanyta-ში]" />
+        <p class="lead intro">
+          Sanyta მხოლოდ დღიური არ არის. ეს თანამგზავრია დაბადებიდან 3 წლამდე — იმ პერიოდისთვის, როცა ყოველ კვირას
+          რაღაც ახალი მოაქვს.
+        </p>
+      </div>
+      <ul class="inside">
+        {inside.map((f, i) => (
+          <li class="reveal" style={`--i: ${i % 2}`}>
+            <span class="ico"><Icon name={f.icon} size={22} /></span>
+            <div>
+              <h3>{f.name}</h3>
+              <p>{f.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band-a section">
+    <div class="wrap closing">
+      <aside class="note reveal">
+        <h3>მცირე შენიშვნა</h3>
+        <p>
+          Sanyta დამხმარე ინსტრუმენტია და არ ანაცვლებს პროფესიონალურ სამედიცინო რჩევას. ბავშვის ჯანმრთელობასთან
+          დაკავშირებულ ნებისმიერ კითხვაზე მიმართე პედიატრს.
+        </p>
+      </aside>
+
+      <div class="cta reveal" style="--i: 1">
+        <Title text="გაიცანი [Sanyta]" />
+        <p class="trial">{trialLine}</p>
+        <StoreButton />
+        <a class="link-arrow contact" href={`mailto:${site.email}`}>
+          <Icon name="envelope-simple" size={18} /> კითხვა ან იდეა გაქვს? მოგვწერე
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mission-section { padding-block: 8px clamp(80px, 11vw, 136px); }
+  .mission-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 48px clamp(40px, 7vw, 112px);
+    align-items: start;
+  }
+  .mission h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); }
+  .mission p { margin-top: 16px; font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.7; }
+
+  .values, .inside { list-style: none; margin: 0; padding: 0; }
+  .values { display: grid; gap: 32px; }
+  .values li, .inside li { display: grid; grid-template-columns: 44px 1fr; gap: 16px; align-items: start; }
+  .ico {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-pill);
+    background: var(--primary-light);
+    color: var(--highlight-ink);
+  }
+  .values h3, .inside h3 { font-size: 1.0625rem; }
+  .values p, .inside p { margin-top: 6px; color: var(--text-2); font-size: 0.9375rem; }
+
+  .intro { margin-top: 16px; }
+  .inside {
+    margin-top: clamp(40px, 5vw, 56px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px clamp(32px, 5vw, 72px);
+  }
+
+  .closing {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: 40px clamp(40px, 6vw, 96px);
+    align-items: center;
+  }
+  .note {
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: var(--r-box);
+    box-shadow: inset 0 0 0 1px var(--divider);
+  }
+  .note p { margin-top: 8px; color: var(--text-2); }
+
+  .cta .trial { margin: 14px 0 24px; color: var(--text-2); font-size: 0.9375rem; }
+  .contact { margin-top: 24px; }
+
+  @media (max-width: 860px) {
+    .mission-grid, .closing { grid-template-columns: 1fr; }
+    .inside { grid-template-columns: 1fr; }
+  }
+</style>

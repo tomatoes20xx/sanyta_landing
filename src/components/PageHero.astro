@@ -1,0 +1,36 @@
+---
+// Inner-page header: left-aligned, on the same pale gradient as the home
+// hero, fading into the page. One small label at most (the eyebrow).
+import Title from './Title.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+}
+
+const { eyebrow, title, lead } = Astro.props;
+---
+
+<section class="page-hero">
+  <div class="wrap">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <Title as="h1" text={title} />
+    {lead && <p class="lead">{lead}</p>}
+  </div>
+</section>
+
+<style>
+  .page-hero {
+    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 60%, var(--band-a) 100%);
+    padding: calc(var(--nav-h) + clamp(40px, 6vw, 80px)) 0 clamp(48px, 7vw, 88px);
+  }
+  .page-hero :global(h1) { font-size: clamp(1.75rem, 5vw, 3rem); max-width: 20ch; }
+  .eyebrow {
+    margin-bottom: 14px;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--highlight-ink);
+  }
+  .lead { margin-top: 18px; color: var(--text-2-sky); }
+</style>

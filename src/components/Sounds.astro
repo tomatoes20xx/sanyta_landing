@@ -1,0 +1,193 @@
+---
+// ძილის ხმები: the app's now-playing screen on a phone, beside the headline
+// and the real sounds as a player (20-second previews of the app's audio).
+// One plays at a time, as in the app; the ring shows playback progress.
+// Mirrored from დღიური above it (phone left, copy right) so the two
+// neighbouring splits don't repeat.
+import Icon from './Icon.astro';
+import PhoneMockup from './PhoneMockup.astro';
+import Title from './Title.astro';
+import sounds from '../data/sounds.generated.json';
+import { sleepSounds } from '../data/features';
+
+// app glyph → Phosphor icon
+const icons: Record<string, string> = {
+  note: 'music-notes',
+  star: 'star',
+  moon: 'moon-stars',
+  heart: 'heart',
+  fan: 'fan',
+  rain: 'cloud-rain',
+  ocean: 'waves',
+  fire: 'flame',
+};
+
+const groups = [
+  { title: 'იავნანა', items: sounds.filter((s) => s.tab === 'music') },
+  { title: 'თეთრი ხმაური', items: sounds.filter((s) => s.tab === 'noise') },
+];
+---
+
+<section class="band-b section" id={sleepSounds.id} aria-labelledby="sounds-title">
+  <div class="wrap layout">
+    <div class="device reveal">
+      <PhoneMockup screen="sounds" alt="ძილის ხმების პლეერი: იავნანა უკრავს" />
+    </div>
+
+    <div class="head reveal">
+      <Title id="sounds-title" text={sleepSounds.title} />
+      {sleepSounds.body.map((p) => <p class="lead">{p}</p>)}
+    </div>
+
+    <div class="player reveal" data-sound-preview style="--i: 1">
+      {groups.map((g, i) => (
+        <div class="group">
+          <div class="group-head">
+            <h3>{g.title}</h3>
+            {i === 0 && (
+              <p class="status" role="status" aria-live="polite" data-sound-status>
+                შეეხე ხმას და მოუსმინე.
+              </p>
+            )}
+          </div>
+          <div class="buttons">
+            {g.items.map((s) => (
+              <button class="snd" type="button" data-src={s.src} aria-pressed="false">
+                <span class="ring">
+                  <span class="glyph"><Icon name={icons[s.glyph] ?? 'music-notes'} size={26} /></span>
+                  <span class="glyph-on"><Icon name="pause" weight="fill" size={24} /></span>
+                </span>
+                <span class="t">{s.title}</span>
+                <span class="sr-only">— 20-წამიანი ნიმუში</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/sounds';
+</script>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas:
+      'device head'
+      'device player';
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .device { grid-area: device; display: flex; justify-content: center; align-self: center; }
+  .device :global(.phone) { --phone-w: clamp(230px, 22vw, 290px); }
+  .head { grid-area: head; }
+  .player { grid-area: player; }
+
+  .head :global(h2) { max-width: 20ch; }
+  .head .lead { margin-top: 16px; max-width: 58ch; }
+  .head .lead + .lead { margin-top: 8px; }
+
+  .player {
+    margin-top: clamp(40px, 5vw, 56px);
+    padding: clamp(24px, 3.5vw, 40px);
+    border-radius: var(--r-box);
+    background: var(--card);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* group title on the left; on the first row the hint sits right, quieter */
+  .group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-bottom: 18px;
+  }
+  .group h3 {
+    font-size: 1.125rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 16px 8px;
+  }
+  .group:first-child .buttons { --cols: 4; }
+  .group:nth-child(2) .buttons { --cols: 5; }
+
+  .snd {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .ring {
+    --p: 0;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--highlight-ink);
+    transition: transform .25s var(--ease-out), background-color .2s ease, color .2s ease;
+  }
+  /* playback progress, drawn as a ring */
+  .ring::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(var(--highlight) calc(var(--p) * 1turn), transparent 0);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  }
+  .glyph, .glyph-on { display: grid; place-items: center; }
+  .glyph-on { display: none; }
+
+  .snd:hover .ring { transform: scale(1.05); }
+  .snd:active .ring { transform: scale(0.97); }
+  .snd[aria-pressed='true'] .ring { background: var(--highlight); color: var(--card); }
+  .snd[aria-pressed='true'] .glyph { display: none; }
+  .snd[aria-pressed='true'] .glyph-on { display: grid; }
+
+  .t { font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
+
+  .status {
+    font-size: 0.8125rem;
+    color: var(--text-2);
+    text-align: right;
+  }
+  .status[data-state='error'] { color: var(--highlight-ink); font-weight: 700; }
+
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'head' 'player' 'device';
+      grid-template-rows: auto;
+    }
+    .device { margin-top: 48px; }
+  }
+  @media (max-width: 520px) {
+    .group:first-child .buttons,
+    .group:nth-child(2) .buttons { --cols: 3; }
+    .status { text-align: left; }
+  }
+</style>

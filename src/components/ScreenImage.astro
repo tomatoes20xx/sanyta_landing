@@ -1,0 +1,42 @@
+---
+// A real app screenshot, with its dark-mode twin swapped in by theme when
+// one exists (tools/prepare_assets.py writes both).
+import screens from '../data/screens.generated.json';
+
+interface Props {
+  screen: string;
+  alt: string;
+  eager?: boolean;
+  class?: string;
+}
+
+type Shot = { light: string; dark: string | null; w: number; h: number };
+const { screen, alt, eager = false, class: cls } = Astro.props;
+const s = (screens as Record<string, Shot>)[screen];
+if (!s) throw new Error(`Unknown screen "${screen}" — run tools/prepare_assets.py`);
+---
+
+<img
+  class:list={['shot', cls, { 'shot-light': s.dark }]}
+  src={s.light}
+  alt={alt}
+  width={s.w}
+  height={s.h}
+  loading={eager ? 'eager' : 'lazy'}
+  decoding="async"
+  fetchpriority={eager ? 'high' : undefined}
+/>
+{s.dark && (
+  <img class:list={['shot', 'shot-dark', cls]} src={s.dark} alt="" aria-hidden="true" width={s.w} height={s.h} loading="lazy" decoding="async" />
+)}
+
+<style>
+  .shot { display: block; }
+  .shot-dark { display: none; }
+  :global(:root[data-theme='dark']) .shot-light { display: none; }
+  :global(:root[data-theme='dark']) .shot-dark { display: block; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .shot-light { display: none; }
+    :global(:root:not([data-theme='light'])) .shot-dark { display: block; }
+  }
+</style>

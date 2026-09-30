@@ -1,0 +1,29 @@
+---
+// Home: hero · sources · one section per feature (დღიური, ძილის ხმები, then
+// the six in featureSections, alternating sides and page tones) · privacy
+// statement · FAQ · closing panel.
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import FeatureSection from '../components/FeatureSection.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Hero from '../components/Hero.astro';
+import PrivacyNote from '../components/PrivacyNote.astro';
+import Sounds from '../components/Sounds.astro';
+import Sources from '../components/Sources.astro';
+import { diary, featureSections } from '../data/features';
+---
+
+<Base>
+  <Hero />
+  <Sources />
+  <div id="features">
+    <FeatureSection feature={diary} band="a" />
+    <Sounds />
+    {featureSections.map((f, i) => (
+      <FeatureSection feature={f} band={i % 2 === 0 ? 'a' : 'b'} reverse={i % 2 === 1} />
+    ))}
+  </div>
+  <PrivacyNote />
+  <Faq />
+  <FinalCta />
+</Base>

@@ -1,0 +1,56 @@
+---
+// Flips between light and dark. With no saved choice the page follows
+// the OS setting (tokens.css); a click saves an explicit choice.
+import Icon from './Icon.astro';
+---
+
+<button class="theme-toggle" type="button" aria-label="თემის შეცვლა" title="თემის შეცვლა">
+  <span class="sun"><Icon name="sun" size={20} /></span>
+  <span class="moon"><Icon name="moon" size={20} /></span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  const current = () =>
+    (root.getAttribute('data-theme') as 'light' | 'dark' | null) ?? (media.matches ? 'dark' : 'light');
+
+  document.querySelectorAll<HTMLButtonElement>('.theme-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try {
+        localStorage.setItem('sanyta-theme', next);
+      } catch {
+        // Storage can be blocked (private mode); the choice still applies to this page.
+      }
+    });
+  });
+</script>
+
+<style>
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--r-pill);
+    border: 1.5px solid var(--divider);
+    background: transparent;
+    cursor: pointer;
+    transition: background-color .2s ease, transform .25s var(--ease-out);
+  }
+  .theme-toggle:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+  .theme-toggle:active { transform: scale(0.96); }
+  .theme-toggle span { display: grid; place-items: center; }
+
+  /* Show the icon of the mode you'd switch to. */
+  .sun { display: none !important; }
+  :global(:root[data-theme='dark']) .sun { display: grid !important; }
+  :global(:root[data-theme='dark']) .moon { display: none !important; }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .sun { display: grid !important; }
+    :global(:root:not([data-theme='light'])) .moon { display: none !important; }
+  }
+</style>

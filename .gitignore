@@ -1,0 +1,18 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# local tooling
+.claude/
+.DS_Store
+
+# agent skills installed with the `skills` CLI (a copy lives in the
+# Sanyta project's .claude/skills/, where Claude Code loads it)
+.agents/
+skills-lock.json

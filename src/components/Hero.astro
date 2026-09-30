@@ -1,0 +1,123 @@
+---
+// Asymmetric split hero: headline, lead and CTA on the left; on the right
+// the real home screen, its top level with the headline's, sitting behind
+// the landscape strip and rising over the hills on load.
+// No "free" in the hero, so no disclosure line is needed here; the trial
+// and prices live in the closing section (§A8).
+import HeroLandscape from './HeroLandscape.astro';
+import PhoneMockup from './PhoneMockup.astro';
+import StoreButton from './StoreButton.astro';
+import Icon from './Icon.astro';
+import Title from './Title.astro';
+import { site } from '../data/site';
+---
+
+<section class="hero">
+  <div class="wrap">
+    <div class="grid">
+      <div class="copy">
+        <Title as="h1" class="enter" text="სანდო თანამგზავრი ბავშვის [პირველი 3 წლისთვის]" />
+        <p class="lead enter" style="--i: 1">
+          განვითარება, რეცეპტები და აქტივობები, დღიური, ძილის ხმები, ზრდის გრაფიკი, ვაქცინაცია და კალენდარი —
+          ყველაფერი ერთ ქართულ აპლიკაციაში.
+        </p>
+        <div class="actions enter" style="--i: 2">
+          <StoreButton />
+          <a class="link-arrow" href="#features">გაიგე მეტი <Icon name="arrow-right" size={18} /></a>
+        </div>
+      </div>
+
+      <div class="visual">
+        <PhoneMockup screen="home" alt={`${site.name}-ის მთავარი ეკრანი`} class="hero-phone" eager />
+      </div>
+    </div>
+  </div>
+  <HeroLandscape />
+</section>
+
+<style>
+  .hero {
+    --strip-h: clamp(170px, 21vw, 300px);
+    position: relative;
+    background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 55%, var(--sky-3) 100%);
+    padding-top: calc(var(--nav-h) + clamp(28px, 5vw, 64px));
+    overflow: hidden;
+  }
+  .wrap { position: relative; z-index: 1; }
+
+  /* sized so line 1 („სანდო თანამგზავრი ბავშვის", 15.5em) fits the left
+     column: two lines on desktop */
+  .hero :global(h1) {
+    font-size: clamp(1.75rem, 3.1vw, 2.5rem);
+    line-height: 1.15;
+  }
+  /* on wide screens keep the highlighted phrase together, so it lands on line 2 */
+  @media (min-width: 861px) {
+    .hero :global(h1 .hl) { white-space: nowrap; }
+  }
+
+  /* align-items: start puts the phone's top level with the headline's */
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+
+  /* keep the hills clear of the lead and the button */
+  .copy { padding-bottom: calc(var(--strip-h) * 0.62); }
+  .lead { margin-top: 22px; color: var(--text-2-sky); max-width: 44ch; }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 32px;
+  }
+
+  /* the phone runs past the hero's bottom edge; the hills hide its base */
+  .visual {
+    display: flex;
+    justify-content: center;
+    margin-bottom: calc(var(--strip-h) * -0.16);
+  }
+  .visual :global(.hero-phone) {
+    --phone-w: clamp(250px, 24vw, 310px);
+    animation:
+      rise 1.6s var(--ease-out) 0.3s both,
+      fade-in 1s ease-in 0.3s both;
+  }
+  /* Starts a full phone-height lower (entirely behind the hills and the
+     hero's clipped bottom edge). The rise eases out and covers 99% of its
+     travel in its first 1s (the rest is a few px of settling), so the fade
+     runs 1s: see-through while the phone climbs, fully opaque as it tops out. */
+  @keyframes rise {
+    from { transform: translateY(100%); }
+    to { transform: none; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* entrance: headline, then lead, then CTA and visual */
+  .enter, .hero :global(h1.enter) {
+    animation: enter .9s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 110ms);
+  }
+  @keyframes enter {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .copy { padding-bottom: 0; }
+    .visual { margin-top: 8px; }
+    .visual :global(.hero-phone) { --phone-w: clamp(200px, 58vw, 260px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .enter, .hero :global(h1.enter), .visual :global(.hero-phone) { animation: none; }
+  }
+</style>

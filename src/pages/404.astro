@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+---
+
+<Base title="გვერდი ვერ მოიძებნა — Sanyta" noindex>
+  <PageHero title="ეს გვერდი [ვერ ვიპოვეთ]" lead="შესაძლოა მისამართი შეიცვალა ან ბმული მოძველდა." />
+  <section class="band-a back">
+    <div class="wrap">
+      <a class="pill pill-solid" href="/">მთავარ გვერდზე <Icon name="arrow-right" size={18} /></a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .back { padding-block: 8px 112px; }
+</style>

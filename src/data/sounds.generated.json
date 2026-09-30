@@ -1,0 +1,65 @@
+[
+  {
+    "id": "m01",
+    "tab": "music",
+    "title": "ბრამსის იავნანა",
+    "glyph": "note",
+    "src": "/sounds/m01.mp3"
+  },
+  {
+    "id": "m02",
+    "tab": "music",
+    "title": "მშვიდი ღამე",
+    "glyph": "star",
+    "src": "/sounds/m02.mp3"
+  },
+  {
+    "id": "m03",
+    "tab": "music",
+    "title": "მაკნატუნა",
+    "glyph": "moon",
+    "src": "/sounds/m03.mp3"
+  },
+  {
+    "id": "m04",
+    "tab": "music",
+    "title": "იავნანა",
+    "glyph": "moon",
+    "src": "/sounds/m04.mp3"
+  },
+  {
+    "id": "n05",
+    "tab": "noise",
+    "title": "საშვილოსნოს ხმა",
+    "glyph": "heart",
+    "src": "/sounds/n05.mp3"
+  },
+  {
+    "id": "n01",
+    "tab": "noise",
+    "title": "თმის საშრობის ხმა",
+    "glyph": "fan",
+    "src": "/sounds/n01.mp3"
+  },
+  {
+    "id": "n02",
+    "tab": "noise",
+    "title": "წვიმის ხმა",
+    "glyph": "rain",
+    "src": "/sounds/n02.mp3"
+  },
+  {
+    "id": "n03",
+    "tab": "noise",
+    "title": "ზღვის ტალღები",
+    "glyph": "ocean",
+    "src": "/sounds/n03.mp3"
+  },
+  {
+    "id": "n04",
+    "tab": "noise",
+    "title": "ბუხრის ტკაცუნი",
+    "glyph": "fire",
+    "src": "/sounds/n04.mp3"
+  }
+]

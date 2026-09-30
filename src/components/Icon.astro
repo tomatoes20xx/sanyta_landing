@@ -1,0 +1,22 @@
+---
+// Inline Phosphor icon. Decorative by default (aria-hidden); pass `label`
+// when the icon is the only thing that names a control.
+import { iconSvg, type IconWeight } from '../lib/icons';
+
+interface Props {
+  name: string;
+  weight?: IconWeight;
+  size?: number;
+  class?: string;
+  label?: string;
+}
+
+const { name, weight = 'regular', size = 20, class: cls = '', label } = Astro.props;
+const a11y = label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"';
+const svg = iconSvg(name, weight).replace(
+  '<svg ',
+  `<svg width="${size}" height="${size}" class="icon ${cls}" focusable="false" ${a11y} `,
+);
+---
+
+<Fragment set:html={svg} />

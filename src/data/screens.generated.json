@@ -1,0 +1,74 @@
+{
+  "home": {
+    "light": "/screens/home.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1294
+  },
+  "diary": {
+    "light": "/screens/diary.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1296
+  },
+  "diary-history": {
+    "light": "/screens/diary-history.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1293
+  },
+  "sounds": {
+    "light": "/screens/sounds.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1296
+  },
+  "sounds-list": {
+    "light": "/screens/sounds-list.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1294
+  },
+  "development": {
+    "light": "/screens/development.webp",
+    "dark": null,
+    "w": 556,
+    "h": 1208
+  },
+  "recipes": {
+    "light": "/screens/recipes.webp",
+    "dark": null,
+    "w": 558,
+    "h": 1207
+  },
+  "growth": {
+    "light": "/screens/growth.webp",
+    "dark": null,
+    "w": 558,
+    "h": 1214
+  },
+  "vaccines": {
+    "light": "/screens/vaccines.webp",
+    "dark": null,
+    "w": 557,
+    "h": 1213
+  },
+  "calendar": {
+    "light": "/screens/calendar.webp",
+    "dark": null,
+    "w": 556,
+    "h": 1210
+  },
+  "moments": {
+    "light": "/screens/moments.webp",
+    "dark": null,
+    "w": 600,
+    "h": 1179
+  },
+  "profile": {
+    "light": "/screens/profile.webp",
+    "dark": null,
+    "w": 558,
+    "h": 1215
+  }
+}

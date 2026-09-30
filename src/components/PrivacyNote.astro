@@ -1,0 +1,53 @@
+---
+// Pillar 4 as one statement in large type, with the §A8 privacy set
+// underneath as a single line of facts (not cards).
+import Icon from './Icon.astro';
+import Title from './Title.astro';
+
+const facts = [
+  { icon: 'user-minus', text: 'ანგარიში არ სჭირდება' },
+  { icon: 'wifi-slash', text: 'მუშაობს ინტერნეტის გარეშეც' },
+  { icon: 'prohibit', text: 'რეკლამის გარეშე' },
+  { icon: 'hand-coins', text: 'მონაცემებს არ ვყიდით' },
+];
+---
+
+<section class="band-a section" aria-labelledby="privacy-title">
+  <div class="wrap">
+    <div class="reveal">
+      <Title id="privacy-title" class="statement" text="შენი მონაცემები — [მხოლოდ შენს ტელეფონში.]" />
+    </div>
+    <ul class="facts reveal" style="--i: 1">
+      {facts.map((f) => (
+        <li><Icon name={f.icon} size={22} />{f.text}</li>
+      ))}
+    </ul>
+    <a class="link-arrow reveal" style="--i: 2" href="/privacy.html">კონფიდენციალურობის პოლიტიკა <Icon name="arrow-right" size={18} /></a>
+  </div>
+</section>
+
+<style>
+  .wrap :global(.statement) {
+    font-size: clamp(2rem, 4.6vw, 3.75rem);
+    line-height: 1.12;
+    max-width: 18ch;
+  }
+
+  .facts {
+    list-style: none;
+    margin: clamp(32px, 4vw, 48px) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 32px;
+  }
+  .facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+  .facts :global(.icon) { color: var(--highlight-ink); }
+
+  .link-arrow { margin-top: 32px; }
+</style>

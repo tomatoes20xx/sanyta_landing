@@ -1,0 +1,50 @@
+---
+// A phone with a single outline, showing a real screenshot.
+import ScreenImage from './ScreenImage.astro';
+
+interface Props {
+  screen: string;
+  alt: string;
+  eager?: boolean;
+  class?: string;
+}
+
+const { screen, alt, eager = false, class: cls } = Astro.props;
+---
+
+<div class:list={['phone', cls]}>
+  <div class="screen">
+    <ScreenImage screen={screen} alt={alt} eager={eager} />
+  </div>
+</div>
+
+<style>
+  /* Every phone mockup's look is set here. The screen inside follows the
+     radius automatically (outer radius minus the outline). --phone-ratio is
+     width / height: a smaller second number makes the phone wider and
+     shorter (screenshots stay pinned to the top; the bottom is cropped). */
+  .phone {
+    --phone-radius: 40px;
+    --phone-outline: 6px;
+    --phone-ratio: 9 / 18;
+
+    position: relative;
+    width: var(--phone-w, 280px);
+    aspect-ratio: var(--phone-ratio);
+    border: var(--phone-outline) solid var(--bezel);
+    border-radius: var(--phone-radius);
+    box-shadow: var(--shadow-phone);
+  }
+  .screen {
+    height: 100%;
+    border-radius: calc(var(--phone-radius) - var(--phone-outline));
+    overflow: hidden;
+  }
+  .screen :global(.shot) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    background: var(--band-a);
+  }
+</style>

@@ -1,0 +1,73 @@
+---
+// Heading held on the left while the answers scroll on the right.
+// <details> gives keyboard and no-JS support; one hairline between items.
+// Keeps the price terms (W5) and „ცვლის თუ არა Sanyta ექიმს?" (§A8).
+import Icon from './Icon.astro';
+import Title from './Title.astro';
+import { faq } from '../data/faq';
+---
+
+<section class="band-b section" id="faq" aria-labelledby="faq-title">
+  <div class="wrap grid">
+    <div class="head reveal">
+      <Title id="faq-title" text="ხშირად დასმული [კითხვები]" />
+    </div>
+    <div class="list reveal" style="--i: 1">
+      {faq.map((item, i) => (
+        <details name="faq" open={i === 0}>
+          <summary>
+            <span>{item.q}</span>
+            <Icon name="caret-down" size={20} class="chev" />
+          </summary>
+          <p>
+            {item.a}
+            {item.link && (
+              <>
+                {' '}
+                <a href={item.link.href}>{item.link.label}</a>
+              </>
+            )}
+          </p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: 40px clamp(40px, 6vw, 96px);
+    align-items: start;
+  }
+  .head { position: sticky; top: calc(var(--nav-h) + 32px); }
+  .head :global(h2) { max-width: 12ch; }
+
+  details { border-bottom: 1px solid var(--divider); }
+  details:last-child { border-bottom: 0; }
+
+  summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 0;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(.chev) { color: var(--highlight-ink); transition: transform .3s var(--ease-out); }
+  details[open] summary :global(.chev) { transform: rotate(180deg); }
+  summary:hover { color: var(--highlight-ink); }
+
+  details p { padding: 0 0 24px; color: var(--text-2); max-width: 62ch; }
+  details a { color: var(--highlight-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    .head { position: static; }
+  }
+</style>

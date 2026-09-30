@@ -1,0 +1,206 @@
+---
+// The hero's landscape strip (Toma asked for sleepiest's hills, 2026-09-30).
+// Caucasus foothills with a hillside village and a Svan tower; one window
+// glows a little brighter (a parent awake with the baby). The sky is left
+// transparent so the hero gradient shows through, and the phone sits
+// behind the strip and rises over the hills.
+// One drawing, two palettes: every fill is a CSS variable set below for
+// dawn (light) and night (dark).
+// Two layers so it holds up on any width: the scenery keeps its aspect
+// ratio (never cropped on wide screens; on narrow ones it crops the sides)
+// and fades out at both ends; the nearest hill is a separate full-width
+// layer in the next section's colour, so the hero flows into it seamlessly.
+---
+
+<div class="landscape" aria-hidden="true">
+<svg class="scenery" viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice" focusable="false">
+  <defs>
+    <linearGradient id="ls-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--ls-far-top)" />
+      <stop offset="1" style="stop-color: var(--ls-far)" />
+    </linearGradient>
+    <linearGradient id="ls-peak" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--ls-peak-top)" />
+      <stop offset="1" style="stop-color: var(--ls-peak)" />
+    </linearGradient>
+    <linearGradient id="ls-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color: var(--ls-mid-top)" />
+      <stop offset="1" style="stop-color: var(--ls-mid)" />
+    </linearGradient>
+    <radialGradient id="ls-glow">
+      <stop offset="0" style="stop-color: var(--ls-window); stop-opacity: 0.55" />
+      <stop offset="1" style="stop-color: var(--ls-window); stop-opacity: 0" />
+    </radialGradient>
+    <!-- the back layers fade out towards both ends, like sleepiest's strip -->
+    <linearGradient id="ls-fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" />
+      <stop offset="0.07" stop-color="#fff" />
+      <stop offset="0.93" stop-color="#fff" />
+      <stop offset="1" stop-color="#000" />
+    </linearGradient>
+    <mask id="ls-ends" maskUnits="userSpaceOnUse" x="0" y="0" width="1440" height="320">
+      <rect width="1440" height="320" fill="url(#ls-fade)" />
+    </mask>
+  </defs>
+
+  <g mask="url(#ls-ends)">
+    <!-- far range; dips low on the right where the phone rises -->
+    <path fill="url(#ls-far)" d="M0 200C70 175 140 160 210 165C290 170 330 140 390 128C450 116 500 150 560 158C640 168 700 128 770 120C840 112 880 140 930 162C990 186 1060 190 1120 176C1190 160 1260 128 1340 132C1390 134 1420 146 1440 152V320H0Z" />
+    <g class="far-trees">
+      <ellipse cx="860" cy="138" rx="4" ry="12" />
+      <ellipse cx="1204" cy="152" rx="4" ry="12" />
+      <ellipse cx="1216" cy="155" rx="3" ry="9" />
+      <ellipse cx="150" cy="158" rx="4" ry="11" />
+    </g>
+
+    <!-- the rounded mountain behind the village -->
+    <path fill="url(#ls-peak)" d="M250 240C300 190 360 110 430 84C470 70 500 70 530 84C590 112 640 180 690 240Z" />
+
+    <!-- village hill -->
+    <path fill="url(#ls-mid)" d="M0 252C80 226 150 214 230 214C300 214 340 200 400 198C470 196 560 200 640 204C700 207 740 220 790 236C830 248 860 262 900 272V320H0Z" />
+    <!-- right hill, low and open -->
+    <path fill="url(#ls-mid)" d="M820 300C900 262 980 236 1060 226C1150 214 1230 206 1310 212C1370 216 1410 226 1440 232V320H820Z" />
+
+    <!-- birds -->
+    <path class="bird" d="M562 58q6-6 12 0q6-6 12 0" />
+    <path class="bird" d="M596 44q4-4 8 0q4-4 8 0" />
+
+    <!-- chimney smoke -->
+    <path class="smoke" d="M398 150c-6-10 8-16 2-26c-6-10 8-16 2-26" />
+
+    <!-- window glow behind the lit windows -->
+    <circle cx="585" cy="186" r="22" fill="url(#ls-glow)" />
+    <circle cx="378" cy="183" r="13" fill="url(#ls-glow)" />
+    <circle cx="628" cy="190" r="11" fill="url(#ls-glow)" />
+
+    <!-- houses -->
+    <g class="house">
+      <rect x="296" y="184" width="30" height="22" />
+      <rect x="360" y="169" width="46" height="31" />
+      <rect x="415" y="160" width="38" height="39" />
+      <rect x="548" y="173" width="52" height="29" />
+      <rect x="612" y="179" width="34" height="25" />
+      <rect x="1318" y="198" width="26" height="16" />
+    </g>
+    <g class="roof">
+      <path d="M291 186 311 169l20 17Z" />
+      <path d="M354 171 383 147l29 24Z" />
+      <path d="M410 162 434 138l24 24Z" />
+      <path d="M542 175 574 152l32 23Z" />
+      <path d="M607 181 629 163l22 18Z" />
+      <path d="M1314 200 1331 186l17 14Z" />
+      <rect x="395" y="150" width="6" height="12" />
+    </g>
+
+    <!-- Svan tower -->
+    <g class="tower">
+      <path d="M503 204 506 104h22l3 100Z" />
+      <path d="M501 106h32V94h-32Z" />
+    </g>
+    <path class="roof" d="M499 95 517 66l18 29Z" />
+
+    <!-- windows (the wider one on the long house is the one still awake) -->
+    <g class="win">
+      <rect x="514" y="120" width="6" height="10" rx="3" />
+      <rect x="514" y="152" width="6" height="10" rx="3" />
+      <rect x="306" y="191" width="8" height="7" rx="1" />
+      <rect x="373" y="178" width="10" height="10" rx="1" />
+      <rect x="422" y="170" width="8" height="9" rx="1" />
+      <rect x="437" y="170" width="8" height="9" rx="1" />
+      <rect x="558" y="181" width="9" height="10" rx="1" />
+      <rect x="578" y="180" width="14" height="12" rx="1" />
+      <rect x="624" y="186" width="9" height="8" rx="1" />
+      <rect x="1326" y="204" width="7" height="6" rx="1" />
+    </g>
+
+    <!-- cypresses -->
+    <g class="tree">
+      <ellipse cx="245" cy="196" rx="6" ry="20" />
+      <ellipse cx="338" cy="180" rx="6" ry="22" />
+      <ellipse cx="470" cy="175" rx="7" ry="26" />
+      <ellipse cx="483" cy="181" rx="5" ry="18" />
+      <ellipse cx="662" cy="187" rx="6" ry="21" />
+      <ellipse cx="704" cy="196" rx="5" ry="17" />
+      <ellipse cx="1290" cy="195" rx="5" ry="16" />
+    </g>
+  </g>
+
+</svg>
+
+<!-- nearest hill: the next section's colour, stretched edge to edge -->
+<svg class="front" viewBox="0 236 1440 84" preserveAspectRatio="none" focusable="false">
+  <path d="M0 292C160 262 320 250 480 262C620 272 720 282 860 268C1000 254 1120 236 1260 238C1350 240 1410 250 1440 256V320H0Z" />
+</svg>
+</div>
+
+<style>
+  .landscape {
+    /* dawn */
+    --ls-far-top: #EFE0F8;
+    --ls-far: #E2CDF1;
+    --ls-peak-top: #E6D3F6;
+    --ls-peak: #D3BDEB;
+    --ls-mid-top: #F8D3C9;
+    --ls-mid: #F2C0B6;
+    --ls-house: #FFFFFF;
+    --ls-roof: #E9A0A8;
+    --ls-tower: #F7E6EE;
+    --ls-tree: #D9B8DE;
+    --ls-window: #F4A340;
+    --ls-smoke: rgb(107 107 128 / 0.22);
+    --ls-bird: #8E8EA3;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: var(--strip-h);
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  /* 1440 / 320 = 4.5: capping the width at 4.5 × height keeps the drawing
+     at its own ratio on wide screens, so slice never crops its top */
+  .scenery {
+    flex: none;
+    height: 100%;
+    width: min(100%, calc(var(--strip-h) * 4.5));
+  }
+
+  .front {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: calc(var(--strip-h) * 84 / 320);
+  }
+
+  /* night */
+  :global(:root[data-theme='dark']) .landscape {
+    --ls-far-top: #5A3478; --ls-far: #3E2459;
+    --ls-peak-top: #6A3AA0; --ls-peak: #3F2470;
+    --ls-mid-top: #3B2A66; --ls-mid: #2B1F4D;
+    --ls-house: #4A3872; --ls-roof: #2A1B45; --ls-tower: #433266; --ls-tree: #251A42;
+    --ls-window: #FFD088; --ls-smoke: rgb(214 203 232 / 0.28); --ls-bird: #A89BBE;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .landscape {
+      --ls-far-top: #5A3478; --ls-far: #3E2459;
+      --ls-peak-top: #6A3AA0; --ls-peak: #3F2470;
+      --ls-mid-top: #3B2A66; --ls-mid: #2B1F4D;
+      --ls-house: #4A3872; --ls-roof: #2A1B45; --ls-tower: #433266; --ls-tree: #251A42;
+      --ls-window: #FFD088; --ls-smoke: rgb(214 203 232 / 0.28); --ls-bird: #A89BBE;
+    }
+  }
+
+  .house { fill: var(--ls-house); }
+  .roof { fill: var(--ls-roof); }
+  .tower { fill: var(--ls-tower); }
+  .tree, .far-trees { fill: var(--ls-tree); }
+  .win { fill: var(--ls-window); }
+  .front path { fill: var(--band-b); }
+  .smoke { fill: none; stroke: var(--ls-smoke); stroke-width: 3; stroke-linecap: round; }
+  .bird { fill: none; stroke: var(--ls-bird); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>

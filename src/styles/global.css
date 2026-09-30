@@ -1,0 +1,153 @@
+@import '@fontsource-variable/montserrat/wght.css';
+@import '@fontsource-variable/noto-sans-georgian/wght.css';
+@import './tokens.css';
+
+/* Latin text and numerals render in Montserrat; Montserrat has no Georgian
+   glyphs, so those fall through to Noto Sans Georgian. */
+:root {
+  --font: 'Montserrat Variable', 'Noto Sans Georgian Variable', system-ui, sans-serif;
+  --maxw: 1200px;
+  --gutter: clamp(16px, 4vw, 32px);
+  --nav-h: 72px;
+
+  /* Shape rule: interactive things are pills; containers (panels, cards,
+     cells, image frames) are 28px; images inside a container are 20px.
+     The phone mockup keeps a device radius. */
+  --r-pill: 999px;
+  --r-box: 28px;
+  --r-img: 20px;
+
+  /* Layers: content 0, raised decoration 1, nav 50, skip link 100 */
+  --z-raised: 1;
+  --z-nav: 50;
+  --z-skip: 100;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--band-a);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+img, svg, video { display: block; max-width: 100%; }
+/* width/height attributes reserve space (CLS); CSS sizing then keeps the ratio */
+img { height: auto; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+.icon { flex: none; }
+
+::selection { background: var(--primary-light); color: var(--text); }
+
+:focus-visible {
+  outline: 3px solid var(--highlight-ink);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ---------- Page tones ---------- */
+.band-a { background: var(--band-a); --bg: var(--band-a); --card: var(--card-on-a); }
+.band-b { background: var(--band-b); --bg: var(--band-b); --card: var(--card-on-b); }
+.section { padding-block: clamp(80px, 11vw, 136px); }
+
+/* ---------- Type ---------- */
+h1, h2, h3, h4 {
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; }
+h2 { font-size: clamp(1.75rem, 3vw, 2.375rem); font-weight: 800; }
+h3 { font-size: 1.125rem; font-weight: 700; }
+p { margin: 0; text-wrap: pretty; }
+
+.hl { color: var(--highlight); }
+.lead { font-size: clamp(1rem, 1.3vw, 1.125rem); color: var(--text-2); max-width: 60ch; }
+.muted { color: var(--text-2); }
+.small { font-size: 0.875rem; }
+
+/* ---------- Buttons ---------- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 12px 26px;
+  border-radius: var(--r-pill);
+  border: 1.5px solid transparent;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .25s var(--ease-out), background-color .2s ease, box-shadow .25s var(--ease-out);
+}
+.pill:active { transform: scale(0.98); }
+.pill-solid { background: var(--cta-bg); color: var(--cta-ink); box-shadow: var(--shadow-sm); }
+.pill-solid:hover { background: var(--cta-bg-hover); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.pill-outline { border-color: currentColor; background: transparent; }
+.pill-outline:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.link-arrow .icon { transition: transform .25s var(--ease-out); }
+.link-arrow:hover { color: var(--highlight-ink); }
+.link-arrow:hover .icon { transform: translateX(3px); }
+
+/* ---------- Motion ----------
+   Reveal: key sections fade up once as they enter (hierarchy, not decoration).
+   Stagger siblings with style="--i: n". */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s var(--ease-out), transform .8s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+.reveal.in { opacity: 1; transform: none; }
+.no-js .reveal { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

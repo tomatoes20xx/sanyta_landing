@@ -1,0 +1,110 @@
+---
+// Stands in for a phone in the first-aid section: the partner's training at
+// a glance, and the Sanyta-user discount (code is in the app). First Aid
+// SkillHub is named as a partner, never as "our" staff (§A8). Price,
+// discount % and "licensed instructors" stay off until V4 is confirmed.
+import Icon from './Icon.astro';
+import { firstAidTopics } from '../data/features';
+---
+
+<div class="fa-card">
+  <div class="top">
+    <img src="/partners/first-aid-skillhub.webp" alt="First Aid SkillHub" width="64" height="80" loading="lazy" />
+    <div>
+      <p class="kicker">პარტნიორი</p>
+      <p class="partner">First Aid SkillHub</p>
+      <p class="sub">ბავშვთა პირველადი დახმარების პრაქტიკული ტრენინგი ოჯახებისთვის</p>
+    </div>
+  </div>
+
+  <div class="offer">
+    <span class="offer-ico"><Icon name="ticket" size={22} /></span>
+    <div>
+      <p class="offer-title">ფასდაკლება Sanyta-ს მომხმარებლებისთვის</p>
+      <p class="offer-sub">პრომო-კოდი აპშია</p>
+    </div>
+  </div>
+
+  <p class="label">საოჯახო მოდულზე ისწავლი:</p>
+  <ul class="chips">
+    {firstAidTopics.map((t) => <li>{t}</li>)}
+  </ul>
+
+  <p class="meta">≈ 1–1.5 საათი, შენს სახლში, პრაქტიკა მულაჟებზე</p>
+
+  <p class="emergency">
+    <Icon name="phone" size={20} />
+    საგანგებო სიტუაციაში პირველ რიგში 112-ს დაურეკე.
+  </p>
+</div>
+
+<style>
+  .fa-card {
+    width: 100%;
+    max-width: 480px;
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--r-box);
+    background: var(--card);
+    box-shadow: var(--shadow-md);
+  }
+
+  .top { display: flex; gap: 18px; align-items: center; }
+  .top img { width: 64px; height: auto; flex: none; }
+  .kicker { font-size: 0.8125rem; font-weight: 700; color: var(--highlight-ink); }
+  .partner { font-weight: 800; font-size: 1.125rem; margin-top: 2px; }
+
+  .offer {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 22px;
+    padding: 14px 16px;
+    border-radius: var(--r-img);
+    background: var(--primary-light);
+  }
+  .offer-ico {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: var(--r-pill);
+    background: var(--card);
+    color: var(--highlight-ink);
+  }
+  .offer-title { font-weight: 800; font-size: 0.9375rem; }
+  .offer-sub { margin-top: 2px; font-size: 0.8125rem; color: var(--text-2-sky); }
+  .sub { margin-top: 4px; font-size: 0.875rem; color: var(--text-2); line-height: 1.45; }
+
+  .label { margin-top: 24px; font-weight: 700; font-size: 0.9375rem; }
+  .chips {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chips li {
+    padding: 6px 12px;
+    border-radius: var(--r-pill);
+    background: var(--peach-bg);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .meta { margin-top: 18px; font-size: 0.875rem; color: var(--text-2); }
+
+  .emergency {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 12px 16px;
+    border-radius: var(--r-img);
+    background: var(--rec-bg);
+    font-size: 0.875rem;
+    font-weight: 700;
+  }
+  .emergency :global(.icon) { color: var(--highlight-ink); }
+</style>

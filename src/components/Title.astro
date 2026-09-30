@@ -1,0 +1,21 @@
+---
+// A heading whose [bracketed] phrase gets the highlight colour, the way
+// sleepiest.com picks out one phrase per heading.
+interface Props {
+  text: string;
+  as?: 'h1' | 'h2' | 'h3';
+  class?: string;
+  id?: string;
+}
+
+const { text, as: Tag = 'h2', class: cls, id } = Astro.props;
+// Keep a dash on the line of the word before it (never start a line with „—").
+const tidy = text.replace(/ (—|–) /g, ' $1 ');
+const parts = tidy.split(/(\[[^\]]+\])/).filter(Boolean).map((p) =>
+  p.startsWith('[') ? { hl: true, t: p.slice(1, -1) } : { hl: false, t: p },
+);
+---
+
+<Tag class={cls} id={id}>
+  {parts.map((p) => (p.hl ? <span class="hl">{p.t}</span> : p.t))}
+</Tag>

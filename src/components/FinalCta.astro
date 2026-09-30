@@ -1,0 +1,74 @@
+---
+// Closing panel: the sign-off and W3's line, then the honest terms: the
+// free week always next to the subscription and both live prices (§A8, V5).
+import StoreButton from './StoreButton.astro';
+import Title from './Title.astro';
+import { site } from '../data/site';
+---
+
+<section class="band-a closing" aria-labelledby="closing-title">
+  <div class="wrap">
+    <div class="panel reveal">
+      <div class="message">
+        <Title id="closing-title" text="ჯანსაღი ბავშვი. [მშვიდი მშობელი.]" />
+        <p class="lead">ჩამოტვირთე Sanyta — პირველი კვირა უფასოა, შემდეგ — გამოწერა.</p>
+      </div>
+
+      <div class="offer">
+        <dl class="prices">
+          <div>
+            <dt>თვეში</dt>
+            <dd>{site.prices.monthly}</dd>
+          </div>
+          <div>
+            <dt>წელიწადში</dt>
+            <dd>{site.prices.yearly}</dd>
+          </div>
+        </dl>
+
+        <StoreButton />
+        <p class="terms">
+          გამოწერა ავტომატურად განახლდება. გააუქმე App Store-ის ანგარიშის პარამეტრებში, მიმდინარე პერიოდის
+          დასრულებამდე მინიმუმ 24 საათით ადრე.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing { padding-block: 8px clamp(80px, 10vw, 128px); }
+
+  .panel {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 40px clamp(40px, 6vw, 88px);
+    align-items: end;
+    border-radius: var(--r-box);
+    padding: clamp(32px, 5vw, 64px);
+    background: linear-gradient(160deg, var(--sky-2) 0%, var(--sky-3) 100%);
+  }
+
+  .message :global(h2) { font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.12; max-width: 14ch; }
+  .lead { margin-top: 18px; color: var(--text-2-sky); }
+
+  .prices {
+    display: flex;
+    gap: 12px;
+    margin: 0 0 24px;
+  }
+  .prices div {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: var(--r-img);
+    background: color-mix(in srgb, var(--card-on-a) 72%, transparent);
+  }
+  dt { font-size: 0.875rem; color: var(--text-2-sky); }
+  dd { margin: 4px 0 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+
+  .terms { margin-top: 16px; font-size: 0.8125rem; color: var(--text-2-sky); max-width: 52ch; }
+
+  @media (max-width: 860px) {
+    .panel { grid-template-columns: 1fr; align-items: start; }
+  }
+</style>
