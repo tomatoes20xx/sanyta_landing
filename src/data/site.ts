@@ -6,8 +6,7 @@ export const site = {
   url: 'https://sanyta.ge',
   // Region-neutral App Store link: opens in the visitor's own storefront.
   appStoreUrl: 'https://apps.apple.com/app/id6780416078',
-  // TODO(Toma): confirm the spelling, or switch to an @sanyta.ge address.
-  email: 'tomakatcheishvili@gmail.com',
+  email: 'support@sanyta.ge',
 
   // §A1 tagline system
   descriptor: 'Sanyta — ბავშვის განვითარება · პირველი 3 წელი', // <title> (W2)
