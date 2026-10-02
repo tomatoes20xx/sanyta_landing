@@ -44,8 +44,8 @@
   "growth": {
     "light": "/screens/growth.webp",
     "dark": null,
-    "w": 558,
-    "h": 1214
+    "w": 600,
+    "h": 1234
   },
   "vaccines": {
     "light": "/screens/vaccines.webp",

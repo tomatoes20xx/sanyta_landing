@@ -1,0 +1,370 @@
+---
+// The app's Now Playing screen (features/sounds/now_playing_screen.dart),
+// rebuilt in HTML so the phone plays along with the page: tap a sound in the
+// list, or the phone's own controls, and it shows that sound's title, artist,
+// artwork colour, moving bars and real progress (src/scripts/sounds.ts).
+// Sizes are the app's points: --pt is one point at this phone's width
+// (the app is 390pt wide). Colours are the app's soundPlayer* tokens, light
+// and dark. The loop and sleep-timer icons are shown, not wired: the site
+// plays 20-second previews.
+import Icon from './Icon.astro';
+import sounds from '../data/sounds.generated.json';
+import type { IconWeight } from '../lib/icons';
+
+// app glyph (sound_glyph.dart, Material rounded) -> nearest Phosphor icon;
+// fill, except waves, whose fill weight is a solid square
+const glyphs: Record<string, [string, IconWeight]> = {
+  note: ['music-note', 'fill'],
+  star: ['sparkle', 'fill'],
+  moon: ['moon', 'fill'],
+  heart: ['heart', 'fill'],
+  fan: ['wind', 'fill'],
+  rain: ['cloud-rain', 'fill'],
+  ocean: ['waves', 'bold'],
+  fire: ['fire', 'fill'],
+};
+const tabLabel = (tab: string) => (tab === 'music' ? 'იავნანა' : 'თეთრი ხმაური');
+const fmt = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+
+// shown before anything plays: the Georgian lullaby, as in the app's screenshot
+const first = sounds.find((s) => s.id === 'm04') ?? sounds[0];
+---
+
+<div class="np" data-np data-id={first.id} data-tab={first.tab}>
+  <div class="body">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+
+    <div class="top" aria-hidden="true">
+      <span class="glass"><Icon name="caret-down" weight="bold" /></span>
+      <span class="tab" data-np-tab>{tabLabel(first.tab)}</span>
+      <span class="glass"><Icon name="heart" weight="bold" /></span>
+    </div>
+
+    <div class="art-wrap">
+      <div class="art">
+        <span class="glyphs" aria-hidden="true">
+          {sounds.map((s) => (
+            <span class="glyph" data-np-glyph={s.id} hidden={s.id !== first.id}>
+              <Icon name={(glyphs[s.glyph] ?? glyphs.note)[0]} weight={(glyphs[s.glyph] ?? glyphs.note)[1]} />
+            </span>
+          ))}
+        </span>
+        <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+      </div>
+    </div>
+
+    <div class="info">
+      <p class="title" data-np-title>{first.title}</p>
+      <p class="artist" data-np-artist>{first.artist}</p>
+      <div
+        class="seek"
+        role="slider"
+        tabindex="0"
+        aria-label="ხმის პოზიცია"
+        aria-valuemin="0"
+        aria-valuemax={first.seconds}
+        aria-valuenow="0"
+        aria-valuetext="0:00"
+        data-np-seek
+      >
+        <span class="track"><span class="done"></span></span>
+        <span class="thumb"></span>
+      </div>
+      <div class="times" aria-hidden="true">
+        <span data-np-pos>0:00</span>
+        <span data-np-left>-{fmt(first.seconds)}</span>
+      </div>
+    </div>
+
+    <div class="transport">
+      <span class="toggle on" aria-hidden="true"><Icon name="repeat" weight="bold" /></span>
+      <button class="skip" type="button" aria-label="წინა ხმა" data-np-prev>
+        <Icon name="skip-back" weight="fill" />
+      </button>
+      <button class="main" type="button" aria-label="ჩართე" data-np-toggle>
+        <Icon name="play" weight="fill" class="i-play" />
+        <Icon name="pause" weight="fill" class="i-pause" />
+      </button>
+      <button class="skip" type="button" aria-label="შემდეგი ხმა" data-np-next>
+        <Icon name="skip-forward" weight="fill" />
+      </button>
+      <span class="toggle" aria-hidden="true"><Icon name="moon" weight="fill" /></span>
+    </div>
+
+    <p class="desc" data-np-desc>{first.desc}</p>
+  </div>
+</div>
+
+<style>
+  /* the artwork and the blob ease to the next sound's colour */
+  @property --np-chip {
+    syntax: '<color>';
+    inherits: true;
+    initial-value: #b89be4;
+  }
+
+  .np {
+    /* app light tokens */
+    --np-start: #4a2f8f;
+    --np-end: #241452;
+    --np-ink: #f3ecff;
+    --np-sub: #b7a6e0;
+    --np-art-end: #7a6beb;
+    --np-chip-music: #b89be4;
+    --np-chip-noise: #6fc7d2;
+    --np-chip: var(--np-chip-music);
+    --p: 0;
+
+    container-type: inline-size;
+    height: 100%;
+    transition: --np-chip 0.45s ease;
+  }
+  .np[data-tab='noise'] { --np-chip: var(--np-chip-noise); }
+
+  :global(:root[data-theme='dark']) .np {
+    --np-start: #2a1b5e;
+    --np-end: #120a30;
+    --np-ink: #f6eeff;
+    --np-sub: #ac9ed0;
+    --np-art-end: #5b3f9e;
+    --np-chip-music: #9b7ce8;
+    --np-chip-noise: #3fb0c0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :global(:root:not([data-theme='light'])) .np {
+      --np-start: #2a1b5e;
+      --np-end: #120a30;
+      --np-ink: #f6eeff;
+      --np-sub: #ac9ed0;
+      --np-art-end: #5b3f9e;
+      --np-chip-music: #9b7ce8;
+      --np-chip-noise: #3fb0c0;
+    }
+  }
+
+  .body {
+    --pt: calc(100cqw / 390);
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(var(--np-start), var(--np-end));
+    color: var(--np-ink);
+    font-size: calc(12 * var(--pt));
+    line-height: 1.25;
+  }
+  .body :global(.icon) { width: calc(24 * var(--pt)); height: calc(24 * var(--pt)); }
+
+  .blob { position: absolute; border-radius: 50%; pointer-events: none; }
+  .blob-a {
+    right: calc(-60 * var(--pt));
+    top: calc(60 * var(--pt));
+    width: calc(220 * var(--pt));
+    aspect-ratio: 1;
+    background: color-mix(in srgb, var(--np-chip) 22%, transparent);
+  }
+  .blob-b {
+    left: calc(-50 * var(--pt));
+    top: calc(240 * var(--pt));
+    width: calc(160 * var(--pt));
+    aspect-ratio: 1;
+    background: rgb(255 255 255 / 0.06);
+  }
+
+  .top {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: calc(6 * var(--pt)) calc(18 * var(--pt));
+  }
+  .glass {
+    display: grid;
+    place-items: center;
+    width: calc(38 * var(--pt));
+    height: calc(38 * var(--pt));
+    border-radius: calc(14 * var(--pt));
+    background: rgb(255 255 255 / 0.14);
+    color: #fff;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    font-size: calc(11 * var(--pt));
+    font-weight: 700;
+    letter-spacing: calc(1 * var(--pt));
+    color: var(--np-sub);
+  }
+
+  .art-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+    padding: 0 calc(34 * var(--pt));
+  }
+  .art {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: calc(34 * var(--pt));
+    background: linear-gradient(to bottom right, var(--np-chip), var(--np-art-end));
+    box-shadow: 0 calc(26 * var(--pt)) calc(60 * var(--pt)) var(--np-end);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .glyph { display: grid; animation: glyph-in 0.4s var(--ease-out) both; }
+  .glyph[hidden] { display: none; }
+  .glyph :global(.icon) { width: calc(92 * var(--pt)); height: calc(92 * var(--pt)); }
+  @keyframes glyph-in {
+    from { opacity: 0; transform: scale(0.82); }
+  }
+
+  /* eq_bars.dart: three bars on a 900ms sine, 0.2 of a turn apart; at rest
+     they sit at 45% and half strength */
+  .eq {
+    display: flex;
+    align-items: flex-end;
+    gap: calc(4.2 * var(--pt));
+    height: calc(30 * var(--pt));
+    margin-top: calc(20 * var(--pt));
+  }
+  .eq i {
+    width: calc(5.4 * var(--pt));
+    height: 45%;
+    border-radius: calc(3 * var(--pt));
+    background: rgb(255 255 255 / 0.45);
+  }
+  .np[data-playing] .eq i {
+    background: rgb(255 255 255 / 0.9);
+    animation: eq 0.9s ease-in-out infinite;
+  }
+  .np[data-playing] .eq i:nth-child(2) { animation-delay: -0.18s; }
+  .np[data-playing] .eq i:nth-child(3) { animation-delay: -0.36s; }
+  @keyframes eq {
+    0%, 50%, 100% { height: 67.5%; }
+    25% { height: 100%; }
+    75% { height: 35%; }
+  }
+
+  .info { position: relative; padding: 0 calc(30 * var(--pt)); }
+  .title {
+    font-size: calc(23 * var(--pt));
+    font-weight: 800;
+    letter-spacing: calc(-0.4 * var(--pt));
+    color: var(--np-ink);
+  }
+  .artist {
+    margin-top: calc(4 * var(--pt));
+    font-size: calc(13.5 * var(--pt));
+    font-weight: 600;
+    color: var(--np-sub);
+  }
+
+  /* seek_bar.dart: 5pt track, 13pt thumb */
+  .seek {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: calc(16 * var(--pt));
+    margin-top: calc(18 * var(--pt));
+    cursor: pointer;
+    touch-action: none;
+  }
+  .seek:focus-visible { outline: 2px solid #fff; outline-offset: 3px; border-radius: 4px; }
+  .track {
+    position: relative;
+    flex: 1;
+    height: calc(5 * var(--pt));
+    border-radius: calc(3 * var(--pt));
+    background: rgb(255 255 255 / 0.16);
+    overflow: hidden;
+  }
+  .done {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--p) * 100%);
+    background: #fff;
+  }
+  .thumb {
+    position: absolute;
+    left: calc(var(--p) * 100% - 6.5 * var(--pt));
+    width: calc(13 * var(--pt));
+    height: calc(13 * var(--pt));
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 calc(2 * var(--pt)) calc(6 * var(--pt)) rgb(0 0 0 / 0.3);
+  }
+  .times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: calc(6 * var(--pt));
+    font-size: calc(11.5 * var(--pt));
+    font-weight: 700;
+    color: var(--np-sub);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .transport {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(20 * var(--pt));
+    margin-top: calc(14 * var(--pt));
+  }
+  .transport button {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .transport button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; border-radius: 50%; }
+  .toggle {
+    display: grid;
+    padding: calc(7 * var(--pt));
+    border-radius: calc(12 * var(--pt));
+    color: var(--np-sub);
+  }
+  .toggle.on { background: var(--np-chip); color: #fff; }
+  .toggle :global(.icon) { width: calc(20 * var(--pt)); height: calc(20 * var(--pt)); }
+  .transport .skip { padding: calc(6 * var(--pt)); color: #fff; }
+  .skip :global(.icon) { width: calc(34 * var(--pt)); height: calc(34 * var(--pt)); }
+  .skip:active { transform: scale(0.92); }
+  .transport .main {
+    width: calc(72 * var(--pt));
+    height: calc(72 * var(--pt));
+    border-radius: 50%;
+    background: #fff;
+    color: var(--np-start);
+    box-shadow: 0 calc(12 * var(--pt)) calc(30 * var(--pt)) rgb(0 0 0 / 0.35);
+    transition: transform 0.2s var(--ease-out);
+  }
+  .main:active { transform: scale(0.94); }
+  .main :global(.icon) { width: calc(34 * var(--pt)); height: calc(34 * var(--pt)); }
+  .main :global(.i-pause),
+  .np[data-playing] .main :global(.i-play) { display: none; }
+  .np[data-playing] .main :global(.i-pause) { display: block; }
+
+  .desc {
+    position: relative;
+    padding: calc(20 * var(--pt)) calc(30 * var(--pt)) calc(30 * var(--pt));
+    text-align: center;
+    font-size: calc(12 * var(--pt));
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--np-sub);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .np { transition: none; }
+    .glyph { animation: none; }
+    .np[data-playing] .eq i { animation: none; height: 70%; }
+  }
+</style>

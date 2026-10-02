@@ -1,0 +1,117 @@
+---
+// The child's weight line, drawn over the empty growth-chart screenshot
+// ("growth chart.png") the way the app draws it: growth_chart_view.dart has
+// a coral 2.5pt line with fl_chart's curve (smoothness 0.3) and 5pt dots in a
+// 2pt white ring. The screenshot is 1170px for 390pt, so 1pt = 3px.
+//
+// Demo weights, not real measurements: each sits between the app's own WHO
+// P50 and P85 for boys (core/models/who_data.dart), the curves on this chart.
+// It draws when the phone scrolls into view (src/scripts/media.ts).
+
+const CROP = 126; // status bar cut off by prepare_assets.py (1170 * 64 / 592)
+// gridlines measured on the screenshot: 3 months = 144.5px, 2 kg = 82.38px
+const px = (months: number) => 197.5 + 48.17 * months;
+const py = (kg: number) => 1546.5 - (kg - 2) * 41.19 - CROP;
+
+const weights: [number, number][] = [
+  [0, 3.5],
+  [2, 5.8],
+  [4, 7.3],
+  [6, 8.2],
+  [9, 9.2],
+  [11, 9.7],
+];
+
+type P = { x: number; y: number };
+const pts: P[] = weights.map(([m, kg]) => ({ x: px(m), y: py(kg) }));
+
+// fl_chart's LineChartPainter.generateNormalBarPath
+const segs: P[][] = [];
+let temp: P = { x: 0, y: 0 };
+for (let i = 1; i < pts.length; i++) {
+  const prev = pts[i - 1];
+  const cur = pts[i];
+  const next = pts[Math.min(i + 1, pts.length - 1)];
+  const c1 = { x: prev.x + temp.x, y: prev.y + temp.y };
+  temp = { x: ((next.x - prev.x) / 2) * 0.3, y: ((next.y - prev.y) / 2) * 0.3 };
+  const c2 = { x: cur.x - temp.x, y: cur.y - temp.y };
+  segs.push([prev, c1, c2, cur]);
+}
+const r = (n: number) => Math.round(n * 10) / 10;
+const d = `M${r(pts[0].x)} ${r(pts[0].y)}` + segs.map(([, a, b, c]) => ` C${r(a.x)} ${r(a.y)} ${r(b.x)} ${r(b.y)} ${r(c.x)} ${r(c.y)}`).join('');
+
+// how far along the line each dot sits, so it pops as the line reaches it
+const bez = ([p0, p1, p2, p3]: P[], t: number): P => {
+  const u = 1 - t;
+  const k = [u * u * u, 3 * u * u * t, 3 * u * t * t, t * t * t];
+  return { x: k[0] * p0.x + k[1] * p1.x + k[2] * p2.x + k[3] * p3.x, y: k[0] * p0.y + k[1] * p1.y + k[2] * p2.y + k[3] * p3.y };
+};
+const along = [0];
+for (const s of segs) {
+  let len = 0;
+  let last = s[0];
+  for (let k = 1; k <= 32; k++) {
+    const p = bez(s, k / 32);
+    len += Math.hypot(p.x - last.x, p.y - last.y);
+    last = p;
+  }
+  along.push(along[along.length - 1] + len);
+}
+const total = along[along.length - 1];
+---
+
+<svg class="growth-line" viewBox="0 0 1170 2406" preserveAspectRatio="xMidYMin slice" aria-hidden="true" data-media-anim>
+  <path d={d} pathLength="1" />
+  {pts.map((p, i) => (
+    <g class="dot" style={`--at: ${(along[i] / total).toFixed(3)}`}>
+      <circle cx={r(p.x)} cy={r(p.y)} r="18" class="ring" />
+      <circle cx={r(p.x)} cy={r(p.y)} r="15" class="fill" />
+    </g>
+  ))}
+</svg>
+
+<style>
+  /* the screenshot has no dark twin yet, so the app's light colours stay */
+  .growth-line {
+    --coral: #ff6f61;
+    --draw: 1.6s;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  path {
+    fill: none;
+    stroke: var(--coral);
+    stroke-width: 7.5;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+  .ring { fill: none; stroke: #fff; stroke-width: 6; }
+  .fill { fill: var(--coral); }
+  .dot { transform-box: fill-box; transform-origin: center; }
+
+  /* states set on the phone by src/scripts/media.ts; with no script the
+     line simply shows, drawn */
+  :global(.phone[data-state='idle']) path { stroke-dashoffset: 1; }
+  :global(.phone[data-state='idle']) .dot { opacity: 0; transform: scale(0); }
+
+  :global(.phone:is([data-state='playing'], [data-state='paused'])) path {
+    animation: draw var(--draw) linear both;
+  }
+  :global(.phone:is([data-state='playing'], [data-state='paused'])) .dot {
+    animation: pop 0.45s var(--ease-out) calc(var(--at) * var(--draw)) both;
+  }
+  :global(.phone[data-state='paused']) :is(path, .dot) { animation-play-state: paused; }
+
+  @keyframes draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(0); }
+    60% { opacity: 1; transform: scale(1.25); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>

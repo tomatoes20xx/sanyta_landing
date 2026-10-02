@@ -5,7 +5,9 @@
 
 import { counts } from './stats';
 
-export type Shot = { screen: string; alt: string };
+// A phone shows a screenshot (`screen`) or a screen recording (`clip`, from
+// clips.generated.json); `overlay` draws on top of the screenshot.
+export type Shot = { screen?: string; clip?: string; overlay?: 'growth-line'; alt: string };
 
 export type FeatureSection = {
   id: string;
@@ -49,7 +51,7 @@ export const featureSections: FeatureSection[] = [
       `${counts.articles} სტატია და ${counts.activities} აქტივობა ასაკის მიხედვით — UNICEF-ის მასალებზე დაყრდნობით.`,
       'ყოველდღე ახალი აქტივობა, სახლში არსებული ნივთებით.',
     ],
-    screens: [{ screen: 'development', alt: 'განვითარების ეკრანი: სტატიები ასაკის მიხედვით' }],
+    screens: [{ clip: 'development', alt: 'განვითარების ეკრანი: სტატიების სია და ერთი სტატიის გახსნა' }],
   },
   {
     id: 'feeding',
@@ -59,7 +61,7 @@ export const featureSections: FeatureSection[] = [
       `${counts.recipes} რეცეპტი 6 თვიდან 3 წლამდე, NHS-ის რეკომენდაციებით — ინგრედიენტები და ნაბიჯები, ასაკის მიხედვით.`,
       'მყარი საკვებზე გადასვლის რჩევები CDC-ის რეკომენდაციებს ეყრდნობა.',
     ],
-    screens: [{ screen: 'recipes', alt: 'რეცეპტების ეკრანი' }],
+    screens: [{ clip: 'recipes', alt: 'რეცეპტების ეკრანი: რეცეპტის გახსნა — ინგრედიენტები და მომზადება' }],
   },
   {
     id: 'growth',
@@ -68,7 +70,7 @@ export const featureSections: FeatureSection[] = [
     body: [
       'ჩაწერე სიმაღლე და წონა: გრაფიკი WHO-ს ზრდის სტანდარტებთან ერთად გიჩვენებს, როგორ მიჰყვება ბავშვი განვითარების მრუდს. კითხვა თუ გაგიჩნდა — პედიატრს ჰკითხე.',
     ],
-    screens: [{ screen: 'growth', alt: 'ზრდის გრაფიკი WHO-ს პერცენტილებით' }],
+    screens: [{ screen: 'growth', overlay: 'growth-line', alt: 'ზრდის გრაფიკი: ბავშვის წონის მრუდი WHO-ს პერცენტილებთან ერთად' }],
   },
   {
     id: 'vaccines',
@@ -79,8 +81,8 @@ export const featureSections: FeatureSection[] = [
       'ექიმთან ვიზიტები და შეხვედრები კალენდარში ჩაინიშნე — შეხსენებებით.',
     ],
     screens: [
-      { screen: 'vaccines', alt: 'ვაქცინაციის ეკრანი: NCDC-ის კალენდარი' },
-      { screen: 'calendar', alt: 'კალენდრის ეკრანი: ვიზიტები და შეხვედრები' },
+      { clip: 'vaccines', alt: 'ვაქცინაციის ეკრანი: NCDC-ის კალენდარი, აცრის მონიშვნა გაკეთებულად' },
+      { clip: 'calendar', alt: 'კალენდარი: ექიმთან ვიზიტის დროის შეცვლა' },
     ],
   },
   {
@@ -91,7 +93,7 @@ export const featureSections: FeatureSection[] = [
       `${counts.moments} პატარა მომენტი, პირველი კბილიდან პირველ ნაბიჯამდე — ფოტოთი, თარიღითა და შენიშვნით.`,
       'ფოტოები რჩება შენს ტელეფონში.',
     ],
-    screens: [{ screen: 'moments', alt: 'მომენტების ეკრანი: ფოტო-მოგონებები' }],
+    screens: [{ clip: 'moments', alt: 'მომენტების ეკრანი: ახალი ფოტოს დამატება ალბომში' }],
   },
   {
     // A partner's course, not an app feature: say so plainly (§A8 names

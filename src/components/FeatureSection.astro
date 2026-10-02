@@ -6,7 +6,7 @@ import FirstAidCard from './FirstAidCard.astro';
 import Icon from './Icon.astro';
 import PhoneMockup from './PhoneMockup.astro';
 import Title from './Title.astro';
-import type { FeatureSection } from '../data/features';
+import type { FeatureSection, Shot } from '../data/features';
 
 interface Props {
   feature: FeatureSection;
@@ -17,6 +17,8 @@ interface Props {
 const { feature: f, band, reverse = false } = Astro.props;
 const titleId = `${f.id}-title`;
 const screens = f.screens ?? [];
+// sections whose phones move get played by src/scripts/media.ts
+const moves = screens.some((s: Shot) => s.clip || s.overlay);
 ---
 
 <section class:list={[`band-${band}`, 'section', { reverse }]} id={f.id} aria-labelledby={titleId}>
@@ -32,18 +34,29 @@ const screens = f.screens ?? [];
       )}
     </div>
 
-    <div class:list={['visual', 'reveal', { pair: screens.length === 2, card: f.card }]} style="--i: 1">
-      {screens.length === 1 && <PhoneMockup screen={screens[0].screen} alt={screens[0].alt} />}
+    <div
+      class:list={['visual', 'reveal', { pair: screens.length === 2, card: f.card }]}
+      style="--i: 1"
+      data-media-group={moves ? '' : undefined}
+    >
+      {screens.length === 1 && (
+        <PhoneMockup screen={screens[0].screen} clip={screens[0].clip} overlay={screens[0].overlay} alt={screens[0].alt} />
+      )}
+      {/* the front phone (the first screen) plays first */}
       {screens.length === 2 && (
         <>
-          <PhoneMockup screen={screens[1].screen} alt={screens[1].alt} class="back" />
-          <PhoneMockup screen={screens[0].screen} alt={screens[0].alt} class="front" />
+          <PhoneMockup screen={screens[1].screen} clip={screens[1].clip} alt={screens[1].alt} class="back" order={2} />
+          <PhoneMockup screen={screens[0].screen} clip={screens[0].clip} alt={screens[0].alt} class="front" order={1} />
         </>
       )}
       {f.card === 'first-aid' && <FirstAidCard />}
     </div>
   </div>
 </section>
+
+<script>
+  import '../scripts/media';
+</script>
 
 <style>
   .grid {
@@ -84,7 +97,20 @@ const screens = f.screens ?? [];
   .reverse .visual.pair :global(.back) { right: auto; left: 0; }
   .reverse .visual.pair :global(.front) { left: auto; right: 0; }
 
+  /* the phone that plays comes to the front (src/scripts/media.ts sets
+     data-front); without the script the DOM order keeps .front on top */
+  .visual.pair :global(.phone) { z-index: 1; }
+  .visual.pair :global(.phone[data-front]) { z-index: 2; }
+
+  /* pause / replay sit on each phone's outer edge, where the other phone
+     never covers them, whichever is in front */
+  .visual.pair :global(.front .media-btn),
+  .reverse .visual.pair :global(.back .media-btn) { right: auto; left: 12px; }
+  .reverse .visual.pair :global(.front .media-btn) { left: auto; right: 12px; }
+
   @media (max-width: 860px) {
+    .reverse .visual.pair :global(.back .media-btn) { left: auto; right: 12px; }
+    .reverse .visual.pair :global(.front .media-btn) { right: auto; left: 12px; }
     .grid,
     .reverse .grid { grid-template-columns: 1fr; }
     .reverse .text { order: 0; }

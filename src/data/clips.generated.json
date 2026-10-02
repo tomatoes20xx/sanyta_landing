@@ -1,0 +1,52 @@
+{
+  "development": {
+    "light": {
+      "src": "/clips/development.mp4",
+      "poster": "/clips/development.webp"
+    },
+    "dark": null,
+    "w": 592,
+    "h": 1218,
+    "seconds": 6.6
+  },
+  "recipes": {
+    "light": {
+      "src": "/clips/recipes.mp4",
+      "poster": "/clips/recipes.webp"
+    },
+    "dark": null,
+    "w": 592,
+    "h": 1216,
+    "seconds": 11.7
+  },
+  "vaccines": {
+    "light": {
+      "src": "/clips/vaccines.mp4",
+      "poster": "/clips/vaccines.webp"
+    },
+    "dark": null,
+    "w": 592,
+    "h": 1216,
+    "seconds": 8.0
+  },
+  "calendar": {
+    "light": {
+      "src": "/clips/calendar.mp4",
+      "poster": "/clips/calendar.webp"
+    },
+    "dark": null,
+    "w": 592,
+    "h": 1216,
+    "seconds": 7.3
+  },
+  "moments": {
+    "light": {
+      "src": "/clips/moments.mp4",
+      "poster": "/clips/moments.webp"
+    },
+    "dark": null,
+    "w": 592,
+    "h": 1216,
+    "seconds": 6.5
+  }
+}

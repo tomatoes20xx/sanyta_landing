@@ -1,0 +1,33 @@
+---
+// A screen recording of the real app (tools/prepare_assets.py cuts it).
+// It plays once when its phone scrolls into view (src/scripts/media.ts);
+// until then, and with reduced motion, its first frame shows as the poster.
+// Light-mode recordings only for now: `dark` stays null until dark ones exist.
+import clips from '../data/clips.generated.json';
+
+interface Props {
+  clip: string;
+  alt: string;
+}
+
+type Clip = { light: { src: string; poster: string }; dark: null; w: number; h: number; seconds: number };
+const { clip, alt } = Astro.props;
+const c = (clips as Record<string, Clip>)[clip];
+if (!c) throw new Error(`Unknown clip "${clip}" — run tools/prepare_assets.py`);
+---
+
+<video
+  class="shot"
+  muted
+  playsinline
+  preload="none"
+  disablepictureinpicture
+  disableremoteplayback
+  poster={c.light.poster}
+  width={c.w}
+  height={c.h}
+  aria-label={alt}
+  data-media-video
+>
+  <source src={c.light.src} type="video/mp4" />
+</video>

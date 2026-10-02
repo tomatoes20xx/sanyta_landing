@@ -1,11 +1,13 @@
 ---
-// ძილის ხმები: the app's now-playing screen on a phone, beside the headline
-// and the real sounds as a player (20-second previews of the app's audio).
-// One plays at a time, as in the app; the ring shows playback progress.
+// ძილის ხმები: the app's Now Playing screen, live on a phone, beside the
+// headline and the real sounds as a player (20-second previews of the app's
+// audio). One plays at a time, as in the app; the phone and the ring on the
+// sound's button both follow playback.
 // Mirrored from დღიური above it (phone left, copy right) so the two
 // neighbouring splits don't repeat.
 import Icon from './Icon.astro';
 import PhoneMockup from './PhoneMockup.astro';
+import SoundScreen from './SoundScreen.astro';
 import Title from './Title.astro';
 import sounds from '../data/sounds.generated.json';
 import { sleepSounds } from '../data/features';
@@ -31,7 +33,9 @@ const groups = [
 <section class="band-b section" id={sleepSounds.id} aria-labelledby="sounds-title">
   <div class="wrap layout">
     <div class="device reveal">
-      <PhoneMockup screen="sounds" alt="ძილის ხმების პლეერი: იავნანა უკრავს" />
+      <PhoneMockup alt="ძილის ხმების პლეერი">
+        <SoundScreen />
+      </PhoneMockup>
     </div>
 
     <div class="head reveal">
@@ -52,7 +56,7 @@ const groups = [
           </div>
           <div class="buttons">
             {g.items.map((s) => (
-              <button class="snd" type="button" data-src={s.src} aria-pressed="false">
+              <button class="snd" type="button" data-id={s.id} data-src={s.src} aria-pressed="false">
                 <span class="ring">
                   <span class="glyph"><Icon name={icons[s.glyph] ?? 'music-notes'} size={26} /></span>
                   <span class="glyph-on"><Icon name="pause" weight="fill" size={24} /></span>
@@ -180,10 +184,11 @@ const groups = [
   @media (max-width: 860px) {
     .layout {
       grid-template-columns: 1fr;
-      grid-template-areas: 'head' 'player' 'device';
+      grid-template-areas: 'head' 'device' 'player';
       grid-template-rows: auto;
     }
-    .device { margin-top: 48px; }
+    /* the phone sits right above the sounds it plays */
+    .device { margin-top: 40px; }
   }
   @media (max-width: 520px) {
     .group:first-child .buttons,

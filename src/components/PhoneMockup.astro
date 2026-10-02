@@ -1,21 +1,45 @@
 ---
-// A phone with a single outline, showing a real screenshot.
+// A phone with a single outline, showing a real screenshot, a screen
+// recording (`clip`), or a screen built in HTML (the slot: the sound
+// player). `overlay` draws over the screenshot (the growth chart's line).
+// Phones that move get a small pause / replay button over the screen;
+// src/scripts/media.ts runs them.
+import GrowthLine from './GrowthLine.astro';
+import Icon from './Icon.astro';
+import ScreenClip from './ScreenClip.astro';
 import ScreenImage from './ScreenImage.astro';
 
 interface Props {
-  screen: string;
+  screen?: string;
+  clip?: string;
+  overlay?: 'growth-line';
   alt: string;
   eager?: boolean;
   class?: string;
+  /** play order inside a section that has two moving phones */
+  order?: number;
 }
 
-const { screen, alt, eager = false, class: cls } = Astro.props;
+const { screen, clip, overlay, alt, eager = false, class: cls, order } = Astro.props;
+const live = !screen && !clip;
+if (live && !Astro.slots.has('default')) throw new Error('PhoneMockup needs a screen, a clip or slotted content');
+const moves = Boolean(clip || overlay);
 ---
 
-<div class:list={['phone', cls]}>
-  <div class="screen">
-    <ScreenImage screen={screen} alt={alt} eager={eager} />
+<div class:list={['phone', cls]} data-media={moves ? '' : undefined} data-order={order}>
+  <div class="screen" role={live ? 'group' : undefined} aria-label={live ? alt : undefined}>
+    {clip && <ScreenClip clip={clip} alt={alt} />}
+    {screen && <ScreenImage screen={screen} alt={alt} eager={eager} />}
+    {live && <slot />}
+    {overlay === 'growth-line' && <GrowthLine />}
   </div>
+  {moves && (
+    <button class="media-btn" type="button" hidden data-media-btn aria-label="შეაჩერე">
+      <Icon name="pause" weight="fill" size={14} class="i-pause" />
+      <Icon name="play" weight="fill" size={14} class="i-play" />
+      <Icon name="arrow-counter-clockwise" weight="fill" size={15} class="i-replay" />
+    </button>
+  )}
 </div>
 
 <style>
@@ -36,6 +60,7 @@ const { screen, alt, eager = false, class: cls } = Astro.props;
     box-shadow: var(--shadow-phone);
   }
   .screen {
+    position: relative;
     height: 100%;
     border-radius: calc(var(--phone-radius) - var(--phone-outline));
     overflow: hidden;
@@ -47,4 +72,34 @@ const { screen, alt, eager = false, class: cls } = Astro.props;
     object-position: top;
     background: var(--band-a);
   }
+
+  /* over the screen's bottom-right corner, Apple-style: a dark glass disc
+     that reads on any frame of the recording */
+  .media-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.18);
+    border-radius: var(--r-pill);
+    background: rgb(26 20 48 / 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.25s var(--ease-out);
+  }
+  .media-btn[hidden] { display: none; }
+  .media-btn:hover { background: rgb(26 20 48 / 0.75); }
+  .media-btn:active { transform: scale(0.94); }
+  .media-btn:focus-visible { outline: 2px solid var(--highlight-ink); outline-offset: 3px; }
+  .media-btn :global(.icon) { display: none; }
+  .phone[data-state='playing'] .media-btn :global(.i-pause),
+  .phone:is([data-state='idle'], [data-state='paused']) .media-btn :global(.i-play),
+  .phone[data-state='ended'] .media-btn :global(.i-replay) { display: block; }
 </style>
