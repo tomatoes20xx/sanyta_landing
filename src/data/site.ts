@@ -8,8 +8,9 @@ export const site = {
   appStoreUrl: 'https://apps.apple.com/app/id6780416078',
   email: 'support@sanyta.ge',
 
-  // §A1 tagline system
-  descriptor: 'Sanyta — ბავშვის განვითარება · პირველი 3 წელი', // <title> (W2)
+  // §A1 tagline system. The home <title> is Toma's longer search line
+  // (2026-10-05); it names what Sanyta is — an app — and who it is for.
+  descriptor: 'Sanyta — ბავშვის განვითარებაში დამხმარე აპლიკაცია მშობლებისთვის',
   positioning: 'სანდო თანამგზავრი ბავშვის პირველი 3 წლისთვის',
   signOff: 'ჯანსაღი ბავშვი. მშვიდი მშობელი.',
   description:
@@ -17,6 +18,12 @@ export const site = {
 
   // Live App Store prices (Toma, 2026-09-29 — brand guide V5).
   prices: { monthly: '$3.99', yearly: '$34.99' },
+} as const;
+
+// The person behind Sanyta (author.astro, and the Person in schema.ts).
+export const founder = {
+  name: 'თომა ყაჭეიშვილი',
+  role: 'ვებ დეველოპერი',
 } as const;
 
 // §A8: every „უფასო" on the website carries the subscription disclosure.

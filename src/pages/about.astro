@@ -40,7 +40,10 @@ const inside = [
 ];
 ---
 
-<Base title="ჩვენ შესახებ — Sanyta" description="რატომ შეიქმნა Sanyta და რა არის შიგნით: სანდო თანამგზავრი ბავშვის პირველი 3 წლისთვის.">
+<Base
+  title="ჩვენ შესახებ — Sanyta, აპლიკაცია მშობლებისთვის"
+  description="Sanyta — ქართული აპლიკაცია მშობლებისთვის: განვითარება, კვება, ზრდა, აცრები და დღიური ბავშვის პირველი 3 წლისთვის. რატომ შეიქმნა, რა არის შიგნით და ვინ ქმნის."
+>
   <PageHero
     eyebrow="ჩვენ შესახებ"
     title="მშვიდი, [ინფორმირებული] მშობლობისთვის"
@@ -56,6 +59,9 @@ const inside = [
           როგორ იკვებოს პატარა და როდის არის აცრის დრო. სანდო ცოდნას თბილ, მარტივ ინსტრუმენტში ვაერთიანებთ,
           რომელიც ყოველდღიურ ზრუნვას ამსუბუქებს.
         </p>
+        <a class="link-arrow author" href="/author.html">
+          ვინ ქმნის Sanyta-ს <Icon name="arrow-right" size={18} />
+        </a>
       </div>
 
       <ul class="values">
@@ -127,6 +133,7 @@ const inside = [
   }
   .mission h2 { font-size: clamp(1.5rem, 2.4vw, 2rem); }
   .mission p { margin-top: 16px; font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.7; }
+  .mission .author { margin-top: 24px; }
 
   .values, .inside { list-style: none; margin: 0; padding: 0; }
   .values { display: grid; gap: 32px; }
@@ -165,7 +172,9 @@ const inside = [
   .note p { margin-top: 8px; color: var(--text-2); }
 
   .cta .trial { margin: 14px 0 24px; color: var(--text-2); font-size: 0.9375rem; }
-  .contact { margin-top: 24px; }
+  /* its own line under the button: .link-arrow is inline-flex and would
+     otherwise sit right beside the pill wherever the row has room */
+  .contact { display: flex; width: fit-content; margin-top: 24px; }
 
   @media (max-width: 860px) {
     .mission-grid, .closing { grid-template-columns: 1fr; }

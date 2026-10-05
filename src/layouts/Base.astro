@@ -3,14 +3,17 @@ import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { jsonLd } from '../lib/schema';
 
 interface Props {
   title?: string;
   description?: string;
   noindex?: boolean;
+  /** schema.org nodes from src/lib/schema.ts, emitted as one JSON-LD block */
+  schema?: object[];
 }
 
-const { title = site.descriptor, description = site.description, noindex = false } = Astro.props;
+const { title = site.descriptor, description = site.description, noindex = false, schema } = Astro.props;
 // build.format 'file' makes the home page's path /index.html; canonicalise to /.
 const path = Astro.url.pathname.replace(/(^|\/)index\.html$/, '/');
 const canonical = new URL(path, site.url).href;
@@ -39,6 +42,7 @@ const ogImage = new URL('/og.png', site.url).href;
     <meta property="og:image" content={ogImage} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="apple-itunes-app" content="app-id=6780416078" />
+    {schema && <script type="application/ld+json" is:inline set:html={jsonLd(schema)} />}
 
     <!-- Apply the saved theme before first paint, so there is no flash. -->
     <script is:inline>

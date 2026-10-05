@@ -6,9 +6,12 @@ interface Props {
   as?: 'h1' | 'h2' | 'h3';
   class?: string;
   id?: string;
+  /** small label shown above the line but read as part of the heading, so
+      search engines see the feature name („ვაქცინაცია“) in the heading too */
+  kicker?: string;
 }
 
-const { text, as: Tag = 'h2', class: cls, id } = Astro.props;
+const { text, as: Tag = 'h2', class: cls, id, kicker } = Astro.props;
 // Keep a dash on the line of the word before it (never start a line with „—").
 const tidy = text.replace(/ (—|–) /g, ' $1 ');
 const parts = tidy.split(/(\[[^\]]+\])/).filter(Boolean).map((p) =>
@@ -17,5 +20,6 @@ const parts = tidy.split(/(\[[^\]]+\])/).filter(Boolean).map((p) =>
 ---
 
 <Tag class={cls} id={id}>
+  {kicker && <span class="kicker">{kicker}{' '}</span>}
   {parts.map((p) => (p.hl ? <span class="hl">{p.t}</span> : p.t))}
 </Tag>

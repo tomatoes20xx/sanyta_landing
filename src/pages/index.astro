@@ -11,9 +11,10 @@ import PrivacyNote from '../components/PrivacyNote.astro';
 import Sounds from '../components/Sounds.astro';
 import Sources from '../components/Sources.astro';
 import { diary, featureSections } from '../data/features';
+import { mobileApp, organization, website } from '../lib/schema';
 ---
 
-<Base>
+<Base schema={[organization, website, mobileApp]}>
   <Hero />
   <Sources />
   <div id="features">

@@ -13,8 +13,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       filter: (page) => !/\/404(\.html)?$/.test(page),
-      // match the .html URLs the pages link to
-      serialize: (item) => ({ ...item, url: item.url.replace(/\/(about|privacy)$/, '/$1.html') }),
+      // match the .html URLs the pages link to (every page but the home)
+      serialize: (item) => ({ ...item, url: item.url.replace(/(\/[^/.]+)$/, '$1.html') }),
     }),
   ],
   devToolbar: { enabled: false },

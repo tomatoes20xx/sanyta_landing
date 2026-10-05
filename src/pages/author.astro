@@ -1,0 +1,47 @@
+---
+// Author: who makes Sanyta, in Toma's own words (2026-10-05), first person
+// and შენ per D1. No social links, by Toma's choice. The Person markup is
+// what lets search engines tie the app to a named maker.
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import { founder, site } from '../data/site';
+import { organization, person } from '../lib/schema';
+
+const intro =
+  'მე ვარ თომა ყაჭეიშვილი, Sanyta-ს შემქმნელი. პროფესიით ვარ ვებ დეველოპერი. ბოლო 6 თვეა ვმუშაობ აპლიკაციაზე, რომელიც გააერთიანებს ბევრ საჭირო ხელსაწყოს ახალბედა მშობლებისთვის.';
+---
+
+<Base title={`${founder.name} — Sanyta-ს შემქმნელი`} description={intro} schema={[person, organization]}>
+  <PageHero eyebrow="ჩემ შესახებ" title={founder.name} />
+
+  <section class="band-a bio-section">
+    <div class="wrap bio reveal">
+      <p>{intro}</p>
+      <p>
+        კითხვებისა და იდეებისთვის აპლიკაციის გასაუმჯობესებლად მომწერე Sanyta-ს ელფოსტაზე —{' '}
+        <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+      <a class="link-arrow more" href="/about.html">
+        Sanyta-ს შესახებ <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .bio-section { padding-block: 8px clamp(80px, 11vw, 136px); }
+  .bio p {
+    max-width: 60ch;
+    font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+    line-height: 1.7;
+  }
+  .bio p + p { margin-top: 16px; }
+  .bio p a {
+    color: var(--highlight-ink);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .more { margin-top: 32px; }
+</style>
