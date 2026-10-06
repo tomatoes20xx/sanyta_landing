@@ -28,6 +28,13 @@ const groups = [
   { title: 'იავნანა', items: sounds.filter((s) => s.tab === 'music') },
   { title: 'თეთრი ხმაური', items: sounds.filter((s) => s.tab === 'noise') },
 ];
+
+interface Props {
+  /** link to the ძილის ხმები page; off on that page itself */
+  more?: boolean;
+}
+
+const { more = true } = Astro.props;
 ---
 
 <section class="band-b section" id={sleepSounds.id} aria-labelledby="sounds-title">
@@ -41,6 +48,11 @@ const groups = [
     <div class="head reveal">
       <Title id="sounds-title" text={sleepSounds.title} />
       {sleepSounds.body.map((p) => <p class="lead">{p}</p>)}
+      {more && (
+        <a class="link-arrow more" href="/sleep-sounds.html">
+          გაიგე მეტი ძილის ხმების შესახებ <Icon name="arrow-right" size={18} />
+        </a>
+      )}
     </div>
 
     <div class="player reveal" data-sound-preview style="--i: 1">
@@ -95,6 +107,7 @@ const groups = [
   .head :global(h2) { max-width: 20ch; }
   .head .lead { margin-top: 16px; max-width: 58ch; }
   .head .lead + .lead { margin-top: 8px; }
+  .head .more { margin-top: 20px; }
 
   .player {
     margin-top: clamp(40px, 5vw, 56px);

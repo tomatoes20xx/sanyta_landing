@@ -1,0 +1,146 @@
+---
+// Feature pages: /vaccines.html, /growth-chart.html, /sleep-sounds.html.
+// Copy, and the brand rules it follows, live in src/data/feature-pages.ts.
+// Order: hero · what it does (copy + phone, or the sound player) · how it
+// works with the source · FAQ · the closing panel with prices. Section
+// tones alternate whichever of the two the second section is.
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import FeatureSection from '../components/FeatureSection.astro';
+import FinalCta from '../components/FinalCta.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import Sounds from '../components/Sounds.astro';
+import Title from '../components/Title.astro';
+import { featurePages, type FeaturePage } from '../data/feature-pages';
+import { sources } from '../data/sources';
+import { mobileApp, organization } from '../lib/schema';
+
+export function getStaticPaths() {
+  return featurePages.map((page) => ({ params: { page: page.slug }, props: { page } }));
+}
+
+const { page: p } = Astro.props as { page: FeaturePage };
+const source = p.source ? sources.find((s) => s.id === p.source?.id) : undefined;
+if (p.source && !source) throw new Error(`Unknown source "${p.source.id}" on /${p.slug}.html`);
+const related = featurePages.filter((x) => x.slug !== p.slug);
+// the sound player is a band-b section; the copy + phone split is band-a
+const howBand = p.detail ? 'b' : 'a';
+const faqBand = p.detail ? 'a' : 'b';
+---
+
+<Base title={p.title} description={p.description} schema={[organization, mobileApp]}>
+  <PageHero eyebrow={p.name} title={p.h1} lead={p.lead} />
+
+  {p.detail ? <FeatureSection feature={p.detail} band="a" flush /> : <Sounds more={false} />}
+
+  <section class={`band-${howBand} section`} aria-labelledby="how-title">
+    <div class="wrap how">
+      <div class="reveal">
+        <Title id="how-title" text="როგორ [მუშაობს]" />
+        <ol class="steps">
+          {p.steps.map((s) => (
+            <li><span>{s}</span></li>
+          ))}
+        </ol>
+        <p class="related">
+          ასევე ნახე:{' '}
+          {related.map((r, i) => (
+            <>
+              {i > 0 && ' · '}
+              <a href={`/${r.slug}.html`}>{r.name}</a>
+            </>
+          ))}
+        </p>
+      </div>
+
+      <aside class="note reveal" style="--i: 1">
+        {source && p.source ? (
+          <>
+            <p class="label">წყარო</p>
+            <h3>
+              <a href={source.url} target="_blank" rel="noopener">
+                {source.acronym} <Icon name="arrow-up-right" size={16} />
+              </a>
+            </h3>
+            <p class="full">{source.name}</p>
+            <p class="text">{p.source.note}</p>
+          </>
+        ) : (
+          <>
+            <h3>მცირე შენიშვნა</h3>
+            <p class="text">{p.note}</p>
+          </>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <Faq items={p.faq} band={faqBand} />
+  <FinalCta />
+</Base>
+
+<style>
+  .how {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 48px clamp(40px, 7vw, 112px);
+    align-items: start;
+  }
+
+  .steps {
+    list-style: none;
+    counter-reset: step;
+    margin: 32px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  .steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 16px;
+    align-items: start;
+    font-size: clamp(1rem, 1.3vw, 1.125rem);
+  }
+  .steps li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--r-pill);
+    background: var(--primary-light);
+    color: var(--highlight-ink);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  /* centre a one-line step on its number; longer ones run on below */
+  .steps li span { padding-top: 9px; }
+
+  .related { margin-top: 32px; color: var(--text-2); font-size: 0.9375rem; }
+  .related a {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .related a:hover { color: var(--highlight-ink); }
+
+  .note {
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: var(--r-box);
+    box-shadow: inset 0 0 0 1px var(--divider);
+  }
+  .note .label { font-size: 0.875rem; font-weight: 700; color: var(--highlight-ink); }
+  .note .label + h3 { margin-top: 6px; }
+  .note h3 a { display: inline-flex; align-items: center; gap: 6px; }
+  .note h3 a:hover { color: var(--highlight-ink); }
+  .note .full { margin-top: 4px; font-size: 0.9375rem; color: var(--text-2); }
+  .note .text { margin-top: 12px; color: var(--text-2); }
+
+  @media (max-width: 860px) {
+    .how { grid-template-columns: 1fr; }
+  }
+</style>

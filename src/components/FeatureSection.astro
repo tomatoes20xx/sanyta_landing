@@ -12,23 +12,31 @@ interface Props {
   feature: FeatureSection;
   band: 'a' | 'b';
   reverse?: boolean;
+  /** straight under a PageHero: drop the top padding the hero already gives */
+  flush?: boolean;
 }
 
-const { feature: f, band, reverse = false } = Astro.props;
+const { feature: f, band, reverse = false, flush = false } = Astro.props;
 const titleId = `${f.id}-title`;
 const screens = f.screens ?? [];
+// a partner's site opens in a new tab; our own feature pages don't
+const external = f.link ? /^https?:/.test(f.link.href) : false;
 // sections whose phones move get played by src/scripts/media.ts
 const moves = screens.some((s: Shot) => s.clip || s.overlay);
 ---
 
-<section class:list={[`band-${band}`, 'section', { reverse }]} id={f.id} aria-labelledby={titleId}>
+<section class:list={[`band-${band}`, 'section', { reverse, flush }]} id={f.id} aria-labelledby={titleId}>
   <div class="wrap grid">
     <div class="text reveal">
       <Title id={titleId} text={f.title} kicker={f.name} />
       {f.body.map((p) => <p class="lead">{p}</p>)}
       {f.link && (
-        <a class="link-arrow more" href={f.link.href} target="_blank" rel="noopener">
-          {f.link.label} <Icon name="arrow-up-right" size={18} />
+        <a
+          class="link-arrow more"
+          href={f.link.href}
+          {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+        >
+          {f.link.label} <Icon name={external ? 'arrow-up-right' : 'arrow-right'} size={18} />
         </a>
       )}
     </div>
@@ -65,6 +73,7 @@ const moves = screens.some((s: Shot) => s.clip || s.overlay);
     align-items: center;
   }
   .reverse .grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }
+  .section.flush { padding-top: 8px; }
   .reverse .text { order: 2; }
 
   /* the feature name, inside the h2 (Title's kicker) but set as body text */

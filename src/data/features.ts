@@ -71,6 +71,7 @@ export const featureSections: FeatureSection[] = [
       'ჩაწერე სიმაღლე და წონა: გრაფიკი WHO-ს ზრდის სტანდარტებთან ერთად გიჩვენებს, როგორ მიჰყვება ბავშვი განვითარების მრუდს. კითხვა თუ გაგიჩნდა — პედიატრს ჰკითხე.',
     ],
     screens: [{ screen: 'growth', overlay: 'growth-line', alt: 'ზრდის გრაფიკი: ბავშვის წონის მრუდი WHO-ს პერცენტილებთან ერთად' }],
+    link: { href: '/growth-chart.html', label: 'გაიგე მეტი ზრდის გრაფიკის შესახებ' },
   },
   {
     id: 'vaccines',
@@ -84,6 +85,7 @@ export const featureSections: FeatureSection[] = [
       { clip: 'vaccines', alt: 'ვაქცინაციის ეკრანი: NCDC-ის კალენდარი, აცრის მონიშვნა გაკეთებულად' },
       { clip: 'calendar', alt: 'კალენდარი: ექიმთან ვიზიტის დროის შეცვლა' },
     ],
+    link: { href: '/vaccines.html', label: 'გაიგე მეტი ვაქცინაციის კალენდრის შესახებ' },
   },
   {
     id: 'moments',

@@ -4,16 +4,25 @@
 // Keeps the price terms (W5) and „ცვლის თუ არა Sanyta ექიმს?" (§A8).
 import Icon from './Icon.astro';
 import Title from './Title.astro';
-import { faq } from '../data/faq';
+import { faq, type Faq } from '../data/faq';
+
+interface Props {
+  /** a feature page's own questions; the home page uses the site FAQ */
+  items?: Faq[];
+  /** page tone, so the sections around it keep alternating */
+  band?: 'a' | 'b';
+}
+
+const { items = faq, band = 'b' } = Astro.props;
 ---
 
-<section class="band-b section" id="faq" aria-labelledby="faq-title">
+<section class={`band-${band} section`} id="faq" aria-labelledby="faq-title">
   <div class="wrap grid">
     <div class="head reveal">
       <Title id="faq-title" text="ხშირად დასმული [კითხვები]" />
     </div>
     <div class="list reveal" style="--i: 1">
-      {faq.map((item, i) => (
+      {items.map((item, i) => (
         <details name="faq" open={i === 0}>
           <summary>
             <span>{item.q}</span>
