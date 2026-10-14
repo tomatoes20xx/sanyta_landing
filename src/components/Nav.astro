@@ -61,6 +61,37 @@ const isCurrent = (href: string) => (href.replace(/\.html$/, '') || '/') === pat
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') setOpen(false);
     });
+
+    // Section links like /#faq share the home page's path, so the build can only
+    // ever mark home as current. On the home page, hand the mark to a section's
+    // link while that section crosses the middle of the viewport.
+    const links = [...header.querySelectorAll<HTMLAnchorElement>('.links a')];
+    const home = links.find((a) => a.getAttribute('aria-current') === 'page' && !new URL(a.href).hash);
+    const spied = home
+      ? links.flatMap((a) => {
+          const { pathname, hash } = new URL(a.href);
+          const el = pathname === new URL(home.href).pathname && hash && document.querySelector<HTMLElement>(hash);
+          return el ? [{ a, el }] : [];
+        })
+      : [];
+    if (home && spied.length) {
+      let frame = 0;
+      const update = () => {
+        frame = 0;
+        const line = innerHeight / 2;
+        const hit = spied.find(({ el }) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= line && r.bottom > line;
+        });
+        for (const a of links) {
+          if (a === (hit?.a ?? home)) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
+        }
+      };
+      addEventListener('scroll', () => { frame ||= requestAnimationFrame(update); }, { passive: true });
+      addEventListener('resize', update);
+      update();
+    }
   }
 </script>
 
