@@ -2,9 +2,12 @@
 // Heading held on the left while the answers scroll on the right.
 // <details> gives keyboard and no-JS support; one hairline between items.
 // Keeps the price terms (W5) and „ცვლის თუ არა Sanyta ექიმს?" (§A8).
+// The home FAQ ends with the support address in plain sight: the App Store's
+// Support URL lands here (sanyta.ge/#faq), and Apple wants contact info there.
 import Icon from './Icon.astro';
 import Title from './Title.astro';
 import { faq, type Faq } from '../data/faq';
+import { site } from '../data/site';
 
 interface Props {
   /** a feature page's own questions; the home page uses the site FAQ */
@@ -14,6 +17,7 @@ interface Props {
 }
 
 const { items = faq, band = 'b' } = Astro.props;
+const showContact = items === faq;
 ---
 
 <section class={`band-${band} section`} id="faq" aria-labelledby="faq-title">
@@ -39,6 +43,11 @@ const { items = faq, band = 'b' } = Astro.props;
           </p>
         </details>
       ))}
+      {showContact && (
+        <p class="contact">
+          სხვა კითხვა გაქვს? მოგვწერე: <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      )}
     </div>
   </div>
 </section>
@@ -73,7 +82,8 @@ const { items = faq, band = 'b' } = Astro.props;
   summary:hover { color: var(--highlight-ink); }
 
   details p { padding: 0 0 24px; color: var(--text-2); max-width: 62ch; }
-  details a { color: var(--highlight-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .contact { padding-top: 24px; color: var(--text-2); }
+  details a, .contact a { color: var(--highlight-ink); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
 
   @media (max-width: 860px) {
     .grid { grid-template-columns: 1fr; }
